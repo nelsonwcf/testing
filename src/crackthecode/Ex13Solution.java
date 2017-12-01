@@ -2,8 +2,8 @@ package crackthecode;
 
 public class Ex13Solution {
     static void URLify(char[] url, int length) {
-        if (url == null)
-            return;
+        if (url == null) {
+        }
         else {
             // find how many spaces are there
             // O(n) complexity

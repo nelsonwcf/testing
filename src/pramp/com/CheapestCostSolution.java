@@ -1,5 +1,4 @@
-import java.io.*;
-import java.util.*;
+package pramp.com;
 
 class CheapestCostSolution {
 
@@ -19,7 +18,7 @@ class CheapestCostSolution {
     static class SalesPath {
 
         static int getCheapestCost(Node rootNode) {
-            int minimumCost = Integer.MAX_VALUE, aux = 0;
+            int minimumCost = Integer.MAX_VALUE, aux;
 
             if (rootNode.children == null || rootNode.children.length == 0) {
                 return rootNode.cost;

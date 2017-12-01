@@ -51,7 +51,7 @@ class Philosopher implements Runnable {
         getLeftChopstick();
         System.out.println(name + " acquired left chopstick.");
         System.out.println(name + " tries to acquire right chopstick...");
-        if (rightChopstick.isHeld == true) {
+        if (rightChopstick.isHeld) {
             System.out.println(name + " concedes left");
             releaseLeftChopstick();
             try {

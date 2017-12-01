@@ -1,3 +1,5 @@
+package pramp.com;
+
 import java.util.HashMap;
 
 public class DeletionDistanceSolution {

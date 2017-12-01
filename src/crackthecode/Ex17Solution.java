@@ -32,7 +32,6 @@ public class Ex17Solution {
                 image[lastPos - j][i] = tmp;
             }
         }
-        return;
     }
 
     public static void main(String args[]) {

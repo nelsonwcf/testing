@@ -1,6 +1,5 @@
 package crackthecode;
 
-import java.awt.*;
 import java.util.HashMap;
 
 public class Ex82Solution {
