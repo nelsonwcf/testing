@@ -1,37 +1,56 @@
 package careercup;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
+import java.util.Random;
 
 public class PotsOfGoldSolution {
 
-  //  static ArrayDeque<Integer> createListOfPots() {
-//    ArrayDeque<Integer> pots = new ArrayDeque<>();
-//
-//    pots.addAll(Arrays.asList(3,2,9,7));
-//    return pots;
-//  }
+  static private int[] createPots() {
+    Random n = new Random();
+    int size = n.nextInt(20) + 1;
+    int[] pots = new int[size];
 
-  static int[] createPots() {
-    int[] pots = new int[] {3,2,9,7};
+    for (int i = 0; i < size; i++) {
+      pots[i] = n.nextInt(10) + 1;
+      System.out.print(pots[i] + " ");
+    }
+    System.out.println();
+
+
     return pots;
   }
 
-  static private int getMaxScore(int[] pots, int turn, int leftIndex, int rightIndex) {
-    if (leftIndex > rightIndex) {
-      return 0;
-    }
-    if (leftIndex - rightIndex == 0) {
+  // Assumes two-players, A and B.
+  static private int getMaxScore(int[] pots, int turn, int leftIndex, int rightIndex, boolean firstCall) {
+    if (leftIndex == rightIndex) {
       return turn == 0 ? 0 : pots[leftIndex];
     }
 
-    return Math.max((turn == 1 ? pots[rightIndex] : 0) + getMaxScore(pots, turn == 0 ? 1 : 0,leftIndex, rightIndex - 1),
-        (turn == 1 ? pots[leftIndex] : 0) + getMaxScore(pots, turn == 0 ? 1 : 0, leftIndex + 1, rightIndex));
+    int result, right, left;
+
+    if (turn == 1) {
+      right = pots[rightIndex] + getMaxScore(pots, 0, leftIndex, rightIndex - 1, false);
+      left = pots[leftIndex] + getMaxScore(pots, 0, leftIndex + 1, rightIndex, false);
+      result =  Math.max(right, left);
+    } else {
+      right = getMaxScore(pots, 1, leftIndex, rightIndex - 1, false);
+      left = getMaxScore(pots, 1, leftIndex + 1, rightIndex, false);
+      result = Math.min(right, left);
+    }
+
+    if (!firstCall) {
+      return result;
+    }
+
+    return turn == 1 ?
+        (right > left ?
+            pots[rightIndex] : pots[leftIndex])
+        : -1;
   }
 
   public static void main(String[] args) {
     int[] pots = createPots();
-    System.out.println(getMaxScore(pots,1,0,pots.length - 1));
+    System.out.println(getMaxScore(pots, 1, 0, pots.length - 1, false));
+    System.out.println(getMaxScore(pots, 1, 0, pots.length - 1, true));
   }
 
 }
