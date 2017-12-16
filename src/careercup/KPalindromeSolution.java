@@ -38,7 +38,7 @@ public class KPalindromeSolution {
   }
 
   public static void main(String[] args) {
-    String s = "aradbcara";
+    String s = "adacaba";
     int k = 1;
     System.out.println(isKPalindrome(s,2));
   }

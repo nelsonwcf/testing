@@ -27,15 +27,23 @@ public class Problem32Solution {
 
   // solution here: https://stackoverflow.com/questions/354875/reversing-a-linked-list-in-java-recursively
   static void recReverseLinkedList(CustomLinkedList ll) {
-    reverseAux(ll.head);
+    ll.current = ll.head;
+    ll.head = reverseCustomNode(ll.head);
   }
 
-  static CustomNode reverseAux(CustomNode node) {
-    CustomNode test;
-    if (node.next != null) {
-      test = reverseAux(node);
+  static CustomNode reverseCustomNode(CustomNode n) {
+    if (n == null) {
+      return null;
     }
-    test.next = node;
+    if (n.next == null) {
+      return n;
+    }
+
+    CustomNode aux = n.next;
+    n.next = null;
+    CustomNode reversedList = reverseCustomNode(aux);
+    aux.next = n;
+    return reversedList;
   }
 
   static void recPrintLinkedList(CustomLinkedList ll) {
@@ -55,9 +63,12 @@ public class Problem32Solution {
 
   public static void main(String[] args) {
     CustomLinkedList<Integer> ll = new CustomLinkedList<>();
+    ll.add(5);
+    ll.add(4);
+    ll.add(3);
     ll.add(2);
     ll.add(1);
+    recReverseLinkedList(ll);
     ll.print();
-    recPrintLinkedList(ll);
   }
 }
