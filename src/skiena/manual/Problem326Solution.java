@@ -22,30 +22,35 @@ public class Problem326Solution {
 
     for (int i = 0; i < array.length; i++) {
       if (array[i] != ' ') {
-        lastIndex++;
+        lastIndex = i;
       } else {
-        for (int j = firstIndex; j <= lastIndex / 2; j++) {
-          char aux = array[j];
-          array[j] = array[lastIndex - j + firstIndex];
-          array[lastIndex - j + firstIndex] = aux;
+        while (firstIndex <= lastIndex) {
+          char aux = array[firstIndex];
+          array[firstIndex] = array[lastIndex];
+          array[lastIndex] = aux;
+          firstIndex++;
+          lastIndex--;
         }
         firstIndex = i + 1;
         lastIndex = i;
       }
     }
 
-    if (firstIndex < array.length && lastIndex < array.length) {
-      for (int j = firstIndex; j <= lastIndex / 2; j++) {
-        char aux = array[j];
-        array[j] = array[lastIndex - j + firstIndex];
-        array[lastIndex - j + firstIndex] = aux;
-      }
+    while (firstIndex <= lastIndex) {
+      char aux = array[firstIndex];
+      array[firstIndex] = array[lastIndex];
+      array[lastIndex] = aux;
+      firstIndex++;
+      lastIndex--;
     }
   }
 
   public static void main(String[] args) {
     char[] array = "This is my arm, this is my gun.".toCharArray();
     reverseWords(array);
-    System.out.println(Arrays.toString(array));
+    for (char c : array) {
+      System.out.print(c);
+    }
+    System.out.println();
   }
 }
