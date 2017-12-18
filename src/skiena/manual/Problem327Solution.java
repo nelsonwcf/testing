@@ -2,6 +2,7 @@ package skiena.manual;
 
 import custom.structures.CustomLinkedList;
 import custom.structures.CustomNode;
+import sun.awt.image.ImageWatched;
 
 public class Problem327Solution {
   static int detectLinkedlistLoop(CustomLinkedList list) {
@@ -13,10 +14,53 @@ public class Problem327Solution {
     CustomNode fastRunner = list.head;
     CustomNode slowRunner = list.head;
 
+    // Moving runners until fastRunner reaches the end or both runners meet
+    while (fastRunner != null) {
+      fastRunner = fastRunner.next;
+      if (fastRunner != null) {
+        fastRunner = fastRunner.next;
+      } else {
+        return 0;
+      }
+      slowRunner = slowRunner.next;
+      if (fastRunner == slowRunner) {
+        break;
+      }
+    }
 
+    // Found a loop
+    int loopSize = 0;
+    do {
+      fastRunner = fastRunner.next;
+      loopSize++;
+    } while (fastRunner != slowRunner);
+
+    // Finding the intersection
+    fastRunner = list.head;
+    for (int i = 0; i < loopSize; i++) {
+      fastRunner = fastRunner.next;
+    }
+    slowRunner = list.head;
+
+    int loopPosition = 1;
+    while (fastRunner != slowRunner) {
+      fastRunner = fastRunner.next.next;
+      slowRunner = slowRunner.next;
+      loopPosition++;
+    }
+
+    return loopPosition;
+  }
+
+  public static void main(String[] args) {
+    CustomLinkedList<Integer> ll = new CustomLinkedList<>();
+    ll.add(1);
+    ll.add(2);
+    ll.add(3);
+    ll.add(4);
+    ll.add(5);
+    CustomNode<Integer> node = ll.head.next;
+    ll.head.next.next.next = node;
+    System.out.print(detectLinkedlistLoop(ll));
   }
 }
-
-//                  s
-//                  f
-// -> A -> B -> C ->D ->B ->C ->D ->B ->C ->D ->B
