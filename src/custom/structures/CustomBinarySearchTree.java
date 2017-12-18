@@ -40,6 +40,7 @@ public class CustomBinarySearchTree<T extends Comparable<T>> {
 
   public void inOrderPrint() {
     recPrint(head);
+    System.out.println();
   }
 
   private void recPrint(CustomBinaryTreeNode n) {
@@ -48,7 +49,7 @@ public class CustomBinarySearchTree<T extends Comparable<T>> {
     }
 
     recPrint(n.left);
-    System.out.println(n.value);
+    System.out.print(n.value + " ");
     recPrint(n.right);
   }
 
