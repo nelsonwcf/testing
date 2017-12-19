@@ -56,11 +56,7 @@ public class Problem327Solution {
     CustomLinkedList<Integer> ll = new CustomLinkedList<>();
     ll.add(1);
     ll.add(2);
-    ll.add(3);
-    ll.add(4);
-    ll.add(5);
-    CustomNode<Integer> node = ll.head.next;
-    ll.head.next.next.next = node;
+    ll.head.next.next = ll.head.next;
     System.out.print(detectLinkedlistLoop(ll));
   }
 }
