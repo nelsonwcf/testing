@@ -28,6 +28,10 @@ public class Problem445Solution {
     for (int row = 0; row < words.length; row++) {
       currentSnippet[row] = words[row][0];
       minSnippet[row] = words[row][0];
+      if (iWords[row][0] == iWords[0].length - 1) {
+        counter++;
+      }
+
     }
 
     for (int i = 0; i < minSnippet.length; i++) {
@@ -42,7 +46,7 @@ public class Problem445Solution {
       int minRow = 0;
       int minElement = Integer.MAX_VALUE;
       for (int row = 0; row < words.length; row++) {
-        if (iWords[row][0] < iWords[0].length) {
+        if (iWords[row][0] < iWords[0].length - 1) {
           if (iWords[row][iWords[row][0]] < minElement) {
             minElement = iWords[row][iWords[row][0]];
             minRow = row;
@@ -50,11 +54,15 @@ public class Problem445Solution {
         }
       }
 
-      currentSnippet[minRow] = minElement;
       iWords[minRow][0]++;
-      if (iWords[minRow][0] == iWords[0].length) {
+      if (iWords[minRow][0] == iWords[0].length - 1) {
         counter++;
       }
+      currentSnippet[minRow] = iWords[minRow][iWords[minRow][0]];
+
+      minElem = Integer.MAX_VALUE;
+      maxElem = Integer.MIN_VALUE;
+
       for (int i = 0; i < currentSnippet.length; i++) {
         minElem = Math.min(minElem, currentSnippet[i]);
         maxElem = Math.max(maxElem, currentSnippet[i]);
@@ -69,7 +77,7 @@ public class Problem445Solution {
   }
 
   public static void main(String[] args) {
-    int[][] words = {{1,2},{3,4}};
+    int[][] words = {{2,1},{1},{2}};
     for (int i : findSmallestSnipplet(words)) {
       System.out.print(i + " ");
     }
