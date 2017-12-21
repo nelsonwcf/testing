@@ -1,44 +1,77 @@
 package skiena.manual;
 
 public class Problem445Solution {
-  static int[] findSmallestSnipplet(int[] word1, int[] word2, int[] word3) {
-    int i1 = 0;
-    int i2 = 0;
-    int i3 = 0;
-    int[] minSnipplet = new int[3];
-    int minDist = 0;
 
-    minSnipplet[0] = word1[0];
-    minSnipplet[1] = word2[0];
-    minSnipplet[2] = word3[0];
-    minDist = Math.max(word1[0], Math.max(word2[0], word3[0])) - Math.min(word1[0], Math.max(word2[0], word3[0]));
+  static int[] findSmallestSnipplet(int[][] words) {
+    // Variable declaration
+    int[][] iWords;
+    int[] currentSnippet = new int[words.length];
+    int[] minSnippet = new int[words.length];
+    int counter = 0;
+    int minDist;
+    int maxElem = Integer.MIN_VALUE;
+    int minElem = Integer.MAX_VALUE;
 
-    while(i1 < word1.length - 1 && i2 < word2.length - 1 && i3 < word3.length - 1) {
-      if (word1[i1] <= word2[i2] && word1[i1] <= word3[i3]) {
-        i1++;
-      } else if (word2[i2] <= word1[i1] && word2[i2] <= word3[i3]) {
-        i2++;
-      } else {
-        i3++;
-      }
-      if (Math.max(word1[i1], Math.max(word2[i2], word3[i3])) - Math.min(word1[i1], Math.max(word2[i2], word3[i3])) < minDist) {
-        minDist = Math.max(word1[i1], Math.max(word2[i2], word3[i3])) - Math.min(word1[i1], Math.max(word2[i2], word3[i3]));
-        minSnipplet[0] = word1[i1];
-        minSnipplet[1] = word2[i2];
-        minSnipplet[2] = word3[i3];
+    // Array to keep the indexes of the words
+    iWords = new int[words.length][words[0].length + 1];
+    for (int row = 0; row < iWords.length; row++) {
+      for (int col = 0; col < iWords[0].length; col++) {
+        if (col == 0) {
+          iWords[row][col] = 1;
+        } else {
+          iWords[row][col] = words[row][col - 1];
+        }
       }
     }
 
-    return minSnipplet;
+    // Initialize currentSnippet and minSnippet with first elements
+    for (int row = 0; row < words.length; row++) {
+      currentSnippet[row] = words[row][0];
+      minSnippet[row] = words[row][0];
+    }
+
+    for (int i = 0; i < minSnippet.length; i++) {
+      minElem = Math.min(minElem, minSnippet[i]);
+      maxElem = Math.max(maxElem, minSnippet[i]);
+    }
+
+    minDist = maxElem - minElem;
+
+
+    while (counter < words.length) {
+      int minRow = 0;
+      int minElement = Integer.MAX_VALUE;
+      for (int row = 0; row < words.length; row++) {
+        if (iWords[row][0] < iWords[0].length) {
+          if (iWords[row][iWords[row][0]] < minElement) {
+            minElement = iWords[row][iWords[row][0]];
+            minRow = row;
+          }
+        }
+      }
+
+      currentSnippet[minRow] = minElement;
+      iWords[minRow][0]++;
+      if (iWords[minRow][0] == iWords[0].length) {
+        counter++;
+      }
+      for (int i = 0; i < currentSnippet.length; i++) {
+        minElem = Math.min(minElem, currentSnippet[i]);
+        maxElem = Math.max(maxElem, currentSnippet[i]);
+      }
+      if (maxElem - minElem < minDist) {
+        minDist = maxElem - minElem;
+        minSnippet = currentSnippet.clone();
+      }
+    }
+
+    return minSnippet;
   }
 
   public static void main(String[] args) {
-    int[] word1 = {1,4,5,11};
-    int[] word2 = {4,9,10};
-    int[] word3 = {1,6,9,12};
-    for(int n : findSmallestSnipplet(word1, word2, word3)) {
-      System.out.print(n + " ");
+    int[][] words = {{1,2},{3,4}};
+    for (int i : findSmallestSnipplet(words)) {
+      System.out.print(i + " ");
     }
-    System.out.println();
   }
 }
