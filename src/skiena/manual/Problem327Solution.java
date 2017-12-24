@@ -1,18 +1,17 @@
 package skiena.manual;
 
-import custom.structures.CustomLinkedList;
-import custom.structures.CustomNode;
-import sun.awt.image.ImageWatched;
+import custom.structures.LinkedList;
+import custom.structures.SimpleNode;
 
 public class Problem327Solution {
-  static int detectLinkedlistLoop(CustomLinkedList list) {
+  static int detectLinkedlistLoop(LinkedList list) {
     if (list == null || list.size == 0) {
       return 0;
     }
 
     int pos = 1;
-    CustomNode fastRunner = list.head;
-    CustomNode slowRunner = list.head;
+    SimpleNode fastRunner = list.head;
+    SimpleNode slowRunner = list.head;
 
     // Moving runners until fastRunner reaches the end or both runners meet
     while (fastRunner != null) {
@@ -53,7 +52,7 @@ public class Problem327Solution {
   }
 
   public static void main(String[] args) {
-    CustomLinkedList<Integer> ll = new CustomLinkedList<>();
+    LinkedList<Integer> ll = new LinkedList<>();
     ll.add(1);
     ll.add(2);
     ll.head.next.next = ll.head.next;

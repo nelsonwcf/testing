@@ -1,21 +1,21 @@
 package custom.structures;
 
-public class CustomBinarySearchTree<T extends Comparable<T>> {
+public class BinarySearchTree<T extends Comparable<T>> {
   public int size;
-  public CustomBinaryTreeNode<T> head;
+  public BinaryTreeNode<T> head;
 
-  public CustomBinarySearchTree() {
+  public BinarySearchTree() {
     size = 0;
     head = null;
   }
 
   public void add(T v) {
     if (size == 0) {
-      head = new CustomBinaryTreeNode<T>(v);
+      head = new BinaryTreeNode<T>(v);
       size++;
       return;
     } else {
-      CustomBinaryTreeNode<T> runner = head;
+      BinaryTreeNode<T> runner = head;
       boolean foundNode = false;
 
       while (foundNode == false) {
@@ -23,14 +23,14 @@ public class CustomBinarySearchTree<T extends Comparable<T>> {
           if (runner.left != null) {
             runner = runner.left;
           } else {
-            runner.left = new CustomBinaryTreeNode<>(v);
+            runner.left = new BinaryTreeNode<>(v);
             foundNode = true;
           }
         } else {
           if (runner.right != null) {
             runner = runner.right;
           } else {
-            runner.right = new CustomBinaryTreeNode<>(v);
+            runner.right = new BinaryTreeNode<>(v);
             foundNode = true;
           }
         }
@@ -43,7 +43,7 @@ public class CustomBinarySearchTree<T extends Comparable<T>> {
     System.out.println();
   }
 
-  private void recPrint(CustomBinaryTreeNode n) {
+  private void recPrint(BinaryTreeNode n) {
     if (n == null) {
       return;
     }
@@ -54,7 +54,7 @@ public class CustomBinarySearchTree<T extends Comparable<T>> {
   }
 
   public static void main(String[] args) {
-    CustomBinarySearchTree<Integer> bstree = new CustomBinarySearchTree<>();
+    BinarySearchTree<Integer> bstree = new BinarySearchTree<>();
     bstree.add(5);
     bstree.add(2);
     bstree.add(3);

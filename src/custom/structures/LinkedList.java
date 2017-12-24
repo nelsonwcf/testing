@@ -1,11 +1,11 @@
 package custom.structures;
 
-public class CustomLinkedList<T extends Comparable<T>> {
+public class LinkedList<T extends Comparable<T>> {
   public int size;
-  public CustomNode<T> head;
-  public CustomNode<T> current;
+  public SimpleNode<T> head;
+  public SimpleNode<T> current;
 
-  public CustomLinkedList() {
+  public LinkedList() {
     size = 0;
     head = null;
     current = null;
@@ -13,19 +13,19 @@ public class CustomLinkedList<T extends Comparable<T>> {
 
   public void add(T obj) {
     if (size == 0) {
-      head = new CustomNode<>(obj);
+      head = new SimpleNode<>(obj);
       current = head;
       size++;
       return;
     }
 
-    current.next = new CustomNode<>(obj);
+    current.next = new SimpleNode<>(obj);
     current = current.next;
     size++;
   }
 
   public void print() {
-    CustomNode<T> runner = head;
+    SimpleNode<T> runner = head;
     while (runner != null) {
       System.out.print(runner.value + " ");
       runner = runner.next;

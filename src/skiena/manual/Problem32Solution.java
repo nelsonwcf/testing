@@ -1,16 +1,16 @@
 package skiena.manual;
 
-import custom.structures.CustomLinkedList;
-import custom.structures.CustomNode;
+import custom.structures.LinkedList;
+import custom.structures.SimpleNode;
 
 public class Problem32Solution {
-  static void itReverseLinkedList(CustomLinkedList ll) {
+  static void itReverseLinkedList(LinkedList ll) {
     if (ll == null || ll.isEmpty() || ll.size == 1)
       return;
 
-    CustomNode previous = null;
-    CustomNode current = ll.head;
-    CustomNode next = ll.head.next;
+    SimpleNode previous = null;
+    SimpleNode current = ll.head;
+    SimpleNode next = ll.head.next;
 
     ll.current = ll.head;
 
@@ -26,12 +26,12 @@ public class Problem32Solution {
   }
 
   // solution here: https://stackoverflow.com/questions/354875/reversing-a-linked-list-in-java-recursively
-  static void recReverseLinkedList(CustomLinkedList ll) {
+  static void recReverseLinkedList(LinkedList ll) {
     ll.current = ll.head;
     ll.head = reverseCustomNode(ll.head);
   }
 
-  static CustomNode reverseCustomNode(CustomNode n) {
+  static SimpleNode reverseCustomNode(SimpleNode n) {
     if (n == null) {
       return null;
     }
@@ -39,21 +39,21 @@ public class Problem32Solution {
       return n;
     }
 
-    CustomNode aux = n.next;
+    SimpleNode aux = n.next;
     n.next = null;
-    CustomNode reversedList = reverseCustomNode(aux);
+    SimpleNode reversedList = reverseCustomNode(aux);
     aux.next = n;
     return reversedList;
   }
 
-  static void recPrintLinkedList(CustomLinkedList ll) {
+  static void recPrintLinkedList(LinkedList ll) {
     if (ll == null || ll.isEmpty() || ll.size == 1) {
       return;
     }
     recursivePrint(ll.head);
   }
 
-  static void recursivePrint(CustomNode n) {
+  static void recursivePrint(SimpleNode n) {
     if (n.next != null) {
       recursivePrint(n.next);
     }
@@ -62,7 +62,7 @@ public class Problem32Solution {
   }
 
   public static void main(String[] args) {
-    CustomLinkedList<Integer> ll = new CustomLinkedList<>();
+    LinkedList<Integer> ll = new LinkedList<>();
     ll.add(5);
     ll.add(4);
     ll.add(3);

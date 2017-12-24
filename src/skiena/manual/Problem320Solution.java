@@ -1,18 +1,16 @@
 package skiena.manual;
 
-import custom.structures.CustomLinkedList;
-import custom.structures.CustomNode;
-
-import java.util.LinkedList;
+import custom.structures.LinkedList;
+import custom.structures.SimpleNode;
 
 public class Problem320Solution {
-  static CustomNode getMidNode(CustomLinkedList ll) {
+  static SimpleNode getMidNode(LinkedList ll) {
     if (ll == null) {
       return null;
     }
 
     int listSize = 1;
-    CustomNode n = ll.head;
+    SimpleNode n = ll.head;
     while (n.next != null) {
       n = n.next;
       listSize++;
@@ -27,7 +25,7 @@ public class Problem320Solution {
   }
 
   public static void main(String[] args) {
-    CustomLinkedList<Integer> ll = new CustomLinkedList<>();
+    LinkedList<Integer> ll = new LinkedList<>();
 
     ll.add(1);
     ll.add(2);

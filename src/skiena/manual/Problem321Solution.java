@@ -1,12 +1,12 @@
 package skiena.manual;
 
-import custom.structures.CustomBinarySearchTree;
-import custom.structures.CustomBinaryTreeNode;
+import custom.structures.BinarySearchTree;
+import custom.structures.BinaryTreeNode;
 
 public class Problem321Solution {
-  static boolean compareBinaryTrees(CustomBinarySearchTree bt1, CustomBinarySearchTree bt2) {
-    CustomBinaryTreeNode runner1 = bt1.head;
-    CustomBinaryTreeNode runner2 = bt2.head;
+  static boolean compareBinaryTrees(BinarySearchTree bt1, BinarySearchTree bt2) {
+    BinaryTreeNode runner1 = bt1.head;
+    BinaryTreeNode runner2 = bt2.head;
 
     if (runner1 != null && runner2 != null || runner1 == null && runner2 == null) {
       return recursiveCompareBinaryTrees(runner1, runner2);
@@ -14,7 +14,7 @@ public class Problem321Solution {
     return false;
   }
 
-  private static boolean recursiveCompareBinaryTrees(CustomBinaryTreeNode n1, CustomBinaryTreeNode n2) {
+  private static boolean recursiveCompareBinaryTrees(BinaryTreeNode n1, BinaryTreeNode n2) {
     if (n1 == null && n2 != null || n1 != null && n2 == null) {
       return false;
     }
@@ -31,8 +31,8 @@ public class Problem321Solution {
   }
 
   public static void main(String[] args) {
-    CustomBinarySearchTree<Integer> bt1 = new CustomBinarySearchTree<>();
-    CustomBinarySearchTree<Integer> bt2 = new CustomBinarySearchTree<>();
+    BinarySearchTree<Integer> bt1 = new BinarySearchTree<>();
+    BinarySearchTree<Integer> bt2 = new BinarySearchTree<>();
 
     System.out.println(compareBinaryTrees(bt1, bt2));
   }
