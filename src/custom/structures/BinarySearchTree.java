@@ -12,6 +12,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
   public void add(T v) {
     if (size == 0) {
       head = new BinaryTreeNode<T>(v);
+      head.parent = null;
       size++;
       return;
     } else {
@@ -24,6 +25,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
             runner = runner.left;
           } else {
             runner.left = new BinaryTreeNode<>(v);
+            runner.left.parent = runner;
             foundNode = true;
           }
         } else {
@@ -31,6 +33,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
             runner = runner.right;
           } else {
             runner.right = new BinaryTreeNode<>(v);
+            runner.right.parent = runner;
             foundNode = true;
           }
         }
@@ -51,17 +54,5 @@ public class BinarySearchTree<T extends Comparable<T>> {
     recPrint(n.left);
     System.out.print(n.value + " ");
     recPrint(n.right);
-  }
-
-  public static void main(String[] args) {
-    BinarySearchTree<Integer> bstree = new BinarySearchTree<>();
-    bstree.add(5);
-    bstree.add(2);
-    bstree.add(3);
-    bstree.add(10);
-    bstree.add(8);
-    bstree.add(6);
-    bstree.add(11);
-    bstree.inOrderPrint();
   }
 }

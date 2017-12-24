@@ -1,11 +1,10 @@
 package custom.structures;
 
 public class SimpleNode<T extends Comparable<T>> {
-  T value;
-  SimpleNode<T> next;
+  public T value;
+  public SimpleNode next;
 
-  SimpleNode(T value) {
-    this.value = value;
-    this.next = null;
+  public SimpleNode(T obj) {
+    value = obj;
   }
 }
