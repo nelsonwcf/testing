@@ -25,7 +25,7 @@ public class NearestElementSolution {
       return node.value;
     }
     else {
-      while (node != null && node.value.compareTo(nodeValue) > 0) {
+      while (node != null && node.value.compareTo(nodeValue) >= 0) {
         node = node.parent;
       }
       return node.value;
@@ -33,18 +33,15 @@ public class NearestElementSolution {
   }
 
   static int getNextBiggerElement(BinaryTreeNode node) {
+    return 0;
 
   }
-}
 
-class Container<T extends Comparable<T>> {
-  private Supplier<T> supplier;
+  public static void main(String[] args) {
+    BinarySearchTree<Integer> bsp = new BinarySearchTree<>();
+    bsp.add(10);
 
-  Container(Supplier<T> supplier) {
-    this.supplier = supplier;
-  }
 
-  T createContents() {
-    return supplier.get();
+    System.out.println(getNextSmallerElement(bsp.head));
   }
 }
