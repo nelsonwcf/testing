@@ -1,9 +1,10 @@
 package custom.structures;
 
-// Mergesort and Bubblesort seem to be broken after being generalized
-public class Sorts<T extends Comparable<T>> {
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
-  static <T extends Comparable<T>> void quicksort(T[] array) {
+public class Sorts<T extends Comparable<T>> {
+  public static <T extends Comparable<T>> void quicksort(T[] array) {
     // Empty or one element arrays are already sorted
     if (array.length > 1)
       qsort(array, 0, array.length - 1);
@@ -33,43 +34,84 @@ public class Sorts<T extends Comparable<T>> {
     }
   }
 
-  static <T extends Comparable<T>> int[] mergesort(T[] a, int p, int q) {
-    if (p == q) {
-      int[] n = new int[1];
-      //n[0] = a[p];
-      return n;
-    } else {
-      return msort(mergesort(a, p, (p + q) / 2), mergesort(a, (p + q) / 2 + 1, q));
+  public static <T extends Comparable<T>> T[] mergesort(T[] array) {
+    if (array == null || array.length <= 1) {
+      return array;
     }
+
+    return msort(array);
   }
 
-  private static <T extends Comparable<T>> int[] msort(int[] a, int[] b) {
-    int[] x = new int[a.length + b.length];
-    int ap = 0, bp = 0, xp = 0;
+  private static <T extends Comparable<T>> T[] msort(T[] array) {
+    T[] arrayA;
+    T[] arrayB;
+    int left = 0;
+    int right = array.length - 1;
+    int mid = (left + right) / 2;
 
-    while (xp < x.length) {
-      if (ap < a.length && bp < b.length) {
-        x[xp++] = a[ap] < b[bp] ? a[ap++] : b[bp++];
-      } else if (ap < a.length) {
-        x[xp++] = a[ap++];
-      } else if (bp < b.length) {
-        x[xp++] = b[bp++];
+    if (array.length == 1) {
+      return array;
+    }
+
+    if (array.length == 2) {
+      return merge(Arrays.copyOfRange(array, 0, 1), Arrays.copyOfRange(array, 1, 2));
+    }
+
+    arrayA = Arrays.copyOfRange(array, 0, mid);
+    arrayB = Arrays.copyOfRange(array, mid, right + 1);
+
+    return merge(msort(arrayA), msort(arrayB));
+  }
+
+  @SuppressWarnings({"unchecked"})
+  private static <T extends Comparable<T>> T[] merge(T[] arrayA, T[] arrayB) {
+    int leftA = 0;
+    int leftB = 0;
+    int rightA = arrayA.length - 1;
+    int rightB = arrayB.length - 1;
+    int startPosition = 0;
+    T[] result;
+
+    // This is guaranteed to work since the output type is the same as the input type
+    result = (T[]) Array.newInstance(arrayA.getClass().getComponentType(), arrayA.length + arrayB.length);
+
+    while (leftA <= rightA && leftB <= rightB) {
+      if (arrayA[leftA].compareTo(arrayB[leftB]) <= 0) {
+        result[startPosition] = arrayA[leftA];
+        leftA++;
       }
+      else {
+        result[startPosition] = arrayB[leftB];
+        leftB++;
+      }
+      startPosition++;
     }
 
-    return x;
+    while (leftA <= rightA) {
+      result[startPosition] = arrayA[leftA];
+      leftA++;
+      startPosition++;
+    }
+
+    while (leftB <= rightB) {
+      result[startPosition] = arrayB[leftB];
+      leftB++;
+      startPosition++;
+    }
+
+    return result;
   }
 
-  static <T extends Comparable<T>> void bubblesort(T[] a) {
+  public static <T extends Comparable<T>> void bubblesort(T[] array) {
     boolean repeat = true;
 
-    while (repeat == true) {
+    while (repeat) {
       repeat = false;
-      for (int i = 0; i < a.length - 1; i++) {
-        if (a[i + 1].compareTo(a[i]) < 0) {
-          T tmp = a[i];
-          a[i] = a[i + 1];
-          a[i + 1] = tmp;
+      for (int i = 0; i < array.length - 1; i++) {
+        if (array[i + 1].compareTo(array[i]) < 0) {
+          T tmp = array[i];
+          array[i] = array[i + 1];
+          array[i + 1] = tmp;
           repeat = true;
         }
       }
