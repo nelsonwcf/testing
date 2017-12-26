@@ -3,8 +3,6 @@ package careercup;
 import custom.structures.BinarySearchTree;
 import custom.structures.BinaryTreeNode;
 
-import java.util.function.Supplier;
-
 public class NearestElementSolution {
   static int[] getNearestElements(BinarySearchTree bst, int element) {
     if (bst == null || bst.size == 0) {

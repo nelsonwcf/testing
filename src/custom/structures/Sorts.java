@@ -2,6 +2,7 @@ package custom.structures;
 
 // Mergesort and Bubblesort seem to be broken after being generalized
 public class Sorts<T extends Comparable<T>> {
+
   static <T extends Comparable<T>> void quicksort(T[] array) {
     // Empty or one element arrays are already sorted
     if (array.length > 1)
