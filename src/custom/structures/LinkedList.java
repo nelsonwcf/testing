@@ -1,6 +1,11 @@
 package custom.structures;
 
-public class LinkedList<T extends Comparable<T>> {
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+
+public class LinkedList<T> implements Iterable<T> {
   public int size;
   public SimpleNode<T> head;
   public SimpleNode<T> current;
@@ -32,11 +37,45 @@ public class LinkedList<T extends Comparable<T>> {
     }
     System.out.println();
   }
-  
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    SimpleNode aux = head;
+
+    sb.append("[ ");
+    while (aux != null) {
+      sb.append(aux.value);
+      aux = aux.next;
+      if (aux != null) {
+        sb.append(", ");
+      }
+    }
+
+    sb.append(" ]");
+    return sb.toString();
+  }
+
   public boolean isEmpty() {
     if (size > 0) {
       return false;
     }
     return true;
+  }
+
+  @Override
+  public Iterator<T> iterator() {
+    if (size > 0) {
+      T[] values = (T[]) Array.newInstance(head.value.getClass(), size);
+      SimpleNode aux = head;
+      int i = 0;
+      while (aux != null) {
+        values[i] = (T) aux.value;
+        i++;
+        aux = aux.next;
+      }
+      return Arrays.asList(values).iterator();
+    }
+    return new ArrayList<T>().iterator();
   }
 }
