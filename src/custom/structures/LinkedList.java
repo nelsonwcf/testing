@@ -63,19 +63,45 @@ public class LinkedList<T> implements Iterable<T> {
     return true;
   }
 
+//  @Override
+//  public Iterator<T> iterator() {
+//    if (size > 0) {
+//      T[] values = (T[]) Array.newInstance(head.value.getClass(), size);
+//      SimpleNode aux = head;
+//      int i = 0;
+//      while (aux != null) {
+//        values[i] = (T) aux.value;
+//        i++;
+//        aux = aux.next;
+//      }
+//      return Arrays.asList(values).iterator();
+//    }
+//    return new ArrayList<T>().iterator();
+//  }
+
   @Override
   public Iterator<T> iterator() {
-    if (size > 0) {
-      T[] values = (T[]) Array.newInstance(head.value.getClass(), size);
-      SimpleNode aux = head;
-      int i = 0;
-      while (aux != null) {
-        values[i] = (T) aux.value;
-        i++;
-        aux = aux.next;
-      }
-      return Arrays.asList(values).iterator();
-    }
-    return new ArrayList<T>().iterator();
+    return new LinkedListIterator();
   }
+
+  private class LinkedListIterator implements Iterator {
+    private SimpleNode<T> currentNode;
+
+    public LinkedListIterator() {
+      currentNode = new SimpleNode<T>();
+      currentNode.next = head;
+    }
+
+    @Override
+    public boolean hasNext() {
+      return currentNode.next != null;
+    }
+
+    @Override
+    public T next() {
+      currentNode = currentNode.next;
+      return currentNode.value;
+    }
+  }
+
 }
