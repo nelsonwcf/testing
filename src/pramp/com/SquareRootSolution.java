@@ -5,48 +5,36 @@ import java.text.DecimalFormat;
 
 public class SquareRootSolution {
   static double root(double x, int n) {
-    double y = Math.pow(x, 1. / n);
+    DecimalFormat df = new DecimalFormat("#.###");
 
-    return findRoot(0, x, n, y);
-  }
+    double lowerBound = 0;
+    double upperBound = Math.max(1, x);
+    double approxRoot = (upperBound + lowerBound) / 2;
+    double aux;
 
-  private static double findRoot(double left, double right, int n, double real) {
-    double mid = (left + right) / 2;
-    double mid_aux = pow(mid, n);
-
-    if (Math.abs(mid - real) <= 0.001) {
-      DecimalFormat df = new DecimalFormat("#.###");
-      df.setMaximumFractionDigits(3);
-      df.setRoundingMode(RoundingMode.UP);
-      return Double.parseDouble(df.format(mid));
+    if (x == 0) {
+      return 0;
     }
 
-    if (mid > real) {
-      return findRoot(left, mid, n, real);
-    } else {
-      return findRoot(mid, right, n, real);
-    }
-  }
+    df.setRoundingMode(RoundingMode.HALF_UP);
 
-  public static double pow(double x, int n) {
-    if (n == 0) {
-      return 1;
-    }
+    while (approxRoot - lowerBound >= 0.001) {
+      aux = Math.pow(approxRoot, n);
+      if (aux > x) {
+        upperBound = approxRoot;
+      } else if (aux < x) {
+        lowerBound = approxRoot;
+      } else {
+        break;
+      }
 
-    if (n == 1) {
-      return x;
-    }
-
-    double aux = x;
-    for (int i = 2; i <= n; i++) {
-      aux *= x;
+      approxRoot = (upperBound + lowerBound) / 2;
     }
 
-    return aux;
-
+    return Double.parseDouble(df.format(approxRoot));
   }
 
   public static void main(String[] args) {
-    System.out.println(root(3.,2));
+    System.out.println(root(10, 3));
   }
 }
