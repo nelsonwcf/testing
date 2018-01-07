@@ -11,9 +11,11 @@ public class PriorityQueueTest2 {
     Tuple<String, Integer> t3 = new Tuple<>("Pai", 50);
     Tuple<String, Integer> t4 = new Tuple<>("Filho", 10);
 
-    PriorityQueue<Tuple<String,Integer>> pq = new PriorityQueue<Tuple<>>(16,Integer::compareTo);
+    PriorityQueue<Tuple<String,Integer>> pq = new PriorityQueue<>();
     pq.add(t1);
     pq.add(t2);
+    pq.add(t3);
+    pq.add(t4);
     System.out.println(pq.poll());
 
   }

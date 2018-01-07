@@ -1,6 +1,7 @@
 package custom.structures;
 
-public class Tuple<T, K extends Comparable<K>> {
+// Next step is to implement equals and hashcode;
+public class Tuple<T, K extends Comparable<K>> implements Comparable<Tuple<?,K>> {
   private final T key;
   private final K value;
 
@@ -9,8 +10,14 @@ public class Tuple<T, K extends Comparable<K>> {
     this.value = value;
   }
 
-  public int compareTo(Tuple<T,K> o) {
+  @Override
+  public int compareTo(Tuple<?, K> o) {
     return value.compareTo(o.getValue());
+  }
+
+  @Override
+  public String toString() {
+    return key.toString();
   }
 
   public T getKey() {
