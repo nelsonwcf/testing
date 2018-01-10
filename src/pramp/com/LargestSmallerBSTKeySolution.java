@@ -44,20 +44,16 @@ class LargestSmallerBSTKeySolution {
       while (true) {
         if (num == aux.key) {
           break;
-        }
-        else if (num < aux.key) {
+        } else if (num < aux.key) {
           if (aux.left != null) {
             aux = aux.left;
-          }
-          else {
+          } else {
             break;
           }
-        }
-        else {
+        } else {
           if (aux.right != null) {
             aux = aux.right;
-          }
-          else {
+          } else {
             break;
           }
         }
@@ -84,8 +80,7 @@ class LargestSmallerBSTKeySolution {
       }
       if (aux != null) {
         return aux.key;
-      }
-      else {
+      } else {
         return -1;
       }
     }
