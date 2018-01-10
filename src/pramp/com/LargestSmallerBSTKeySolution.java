@@ -32,51 +32,64 @@ class LargestSmallerBSTKeySolution {
   }
 
   static class BinarySearchTree {
-
     Node root;
 
     int findLargestSmallerKey(int num) {
       if (root == null) {
         return -1;
       }
+      // Locate the position of the key
+      Node aux = root;
 
-      Node aux = getSmallerThanNode(root, num, root.parent);
-
-      return aux == null ? -1 : aux.key;
-    }
-
-    Node getSmallerThanNode(Node n, int num, Node parent) {
-      if (n == null || n.key == num) {
-         if (n == null) {
-          while (parent != null && parent.key > num) {
-            parent = parent.parent;
-          }
-          return parent.parent == null ? new Node(-1) : parent.parent;
+      while (true) {
+        if (num == aux.key) {
+          break;
         }
-        else {
-          // Look left node
-          if (n.left != null) {
-            return n.left;
+        else if (num < aux.key) {
+          if (aux.left != null) {
+            aux = aux.left;
           }
           else {
-            while (n.parent != null && n.parent.key > num) {
-              n = n.parent;
-            }
-            return n.parent == null ? new Node(-1) : n.parent;
+            break;
           }
         }
-        // Problem: can't retrieve parent if got to null
-
-
-
+        else {
+          if (aux.right != null) {
+            aux = aux.right;
+          }
+          else {
+            break;
+          }
+        }
       }
 
-      if (num > n.key) {
-        return getSmallerThanNode(n.right, num, n);
+      // If num is greater than current node, return this node
+      if (num > aux.key) {
+        return aux.key;
       }
-      else
-        return getSmallerThanNode(n.left, num, n);
+
+      // If the num is the node and left node is not null
+      // return the rightmost element from the left node
+      if (num == aux.key && aux.left != null) {
+        aux = aux.left;
+        while (aux.right != null) {
+          aux = aux.right;
+        }
+        return aux.key;
+      }
+
+      // If num is smaller than current node, return first parent smaller than it
+      while (aux != null && aux.key >= num) {
+        aux = aux.parent;
+      }
+      if (aux != null) {
+        return aux.key;
+      }
+      else {
+        return -1;
+      }
     }
+
     //  inserts a new node with the given number in the
     //  correct place in the tree
     void insert(int key) {
@@ -131,7 +144,7 @@ class LargestSmallerBSTKeySolution {
     bst.insert(11);
     bst.insert(14);
 
-    int result = bst.findLargestSmallerKey(17);
+    int result = bst.findLargestSmallerKey(26);
     System.out.println("Largest smaller number is " + result);
 
   }
