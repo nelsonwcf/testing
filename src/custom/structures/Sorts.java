@@ -117,4 +117,42 @@ public class Sorts<T extends Comparable<T>> {
       }
     }
   }
+
+
+  public static int[] radixSort(int[] arr) {
+    if (arr == null || arr.length <= 1) {
+      return arr;
+    }
+
+    // Position zero of each array contains the position of last element +1;
+    int[][] radixesTable = new int[10][arr.length + 1];
+    for (int i = 0; i < 10; i++) {
+      radixesTable[i][0] = 1;
+    }
+
+    // Store how many digits the largest number has
+    int maxValue = Integer.MIN_VALUE;
+
+    // First step: traverse array storing each element in the right index in radixesTable
+    for (int i = 0; i < arr.length; i++) {
+      maxValue = maxValue < arr[i] ? arr[i] : maxValue;
+      int index = arr[i] % 10;
+      radixesTable[index][radixesTable[index][0]++] = arr[i];
+    }
+
+    int j = 0;
+    for (int i = 0; i < 10; i++) {
+      int k = 1;
+      while (k++ < radixesTable[i][0]) {
+        arr[j++] = radixesTable[i][k];
+      }
+    }
+
+    return arr;
+  }
+
+  public static void main(String[] args) {
+    int[] i = {1,2};
+    System.out.println(Arrays.toString(radixSort(i)));
+  }
 }
