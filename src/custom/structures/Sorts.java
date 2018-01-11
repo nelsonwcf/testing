@@ -143,8 +143,10 @@ public class Sorts<T extends Comparable<T>> {
     int j = 0;
     for (int i = 0; i < 10; i++) {
       int k = 1;
-      while (k++ < radixesTable[i][0]) {
-        arr[j++] = radixesTable[i][k];
+      while (k < radixesTable[i][0]) {
+        arr[j] = radixesTable[i][k];
+        j++;
+        k++;
       }
     }
 
@@ -152,7 +154,7 @@ public class Sorts<T extends Comparable<T>> {
   }
 
   public static void main(String[] args) {
-    int[] i = {1,2};
+    int[] i = {2,1,4,3,9,7,4,2,7,5,1};
     System.out.println(Arrays.toString(radixSort(i)));
   }
 }

@@ -1,129 +1,89 @@
 package crackthecode;
 
-class Philosopher implements Runnable {
-    String name;
-    Chopstick leftChopstick;
-    Chopstick rightChopstick;
-    boolean holdingLeftChopstick;
-    boolean holdingRightChopstick;
-    Thread t;
+import java.util.concurrent.Semaphore;
 
-    Philosopher(String n, Chopstick left, Chopstick right) {
-        name = n;
-        holdingLeftChopstick = false;
-        holdingRightChopstick = false;
-        leftChopstick = left;
-        rightChopstick = right;
-        t = new Thread(this, name);
-        t.start();
-    }
-
-    void getLeftChopstick() {
-        if (!holdingLeftChopstick) {
-            leftChopstick.acquire();
-            holdingLeftChopstick = true;
-        }
-    }
-
-    void releaseLeftChopstick() {
-        if (holdingLeftChopstick) {
-            leftChopstick.release();
-            holdingLeftChopstick = false;
-        }
-    }
-
-    void getRightChopstick() {
-        if (!holdingRightChopstick) {
-            rightChopstick.acquire();
-            holdingRightChopstick = true;
-        }
-    }
-
-    void releaseRightChopstick() {
-        if (holdingRightChopstick) {
-            rightChopstick.release();
-            holdingRightChopstick = false;
-        }
-    }
-
-    synchronized void eat() {
-        System.out.println(name + " tries to acquire left chopstick...");
-        getLeftChopstick();
-        System.out.println(name + " acquired left chopstick.");
-        System.out.println(name + " tries to acquire right chopstick...");
-        if (rightChopstick.isHeld) {
-            System.out.println(name + " concedes left");
-            releaseLeftChopstick();
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            getLeftChopstick();
-            getRightChopstick();
-        }
-        System.out.println(name + " acquired right chopstick.");
-        System.out.println(name + " is eating...");
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println(name + " finished eating.");
-        System.out.println(name + " is releasing chopstick...");
-        releaseLeftChopstick();
-        System.out.println(name + " released left chopstick.");
-        System.out.println(name + " is releasing right chopstick...");
-        releaseRightChopstick();
-        System.out.println(name + " released right chopstick.");
-    }
-
-    @Override
-    public void run() {
-        for (int i = 5; i > 0; i--) {
-            eat();
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+public class Ex153Solution {
+  public static void main(String[] args) {
+    Chopstick c1 = new Chopstick("c1", new Semaphore(1));
+    Chopstick c2 = new Chopstick("c2", new Semaphore(1));
+    Philosopher p1 = new Philosopher("p1",c1,c2);
+  }
 }
 
 class Chopstick {
-    boolean isHeld = false;
+  Semaphore sem;
+  String name;
 
-    synchronized Chopstick acquire() {
-        if (isHeld)
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        isHeld = true;
-        return this;
-    }
+  Chopstick(String name, Semaphore sem) {
+    this.sem = sem;
+    this.name = name;
+  }
 
-    synchronized void release() {
-        isHeld = false;
-        notify();
+  boolean get() {
+    try {
+      sem.acquire();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
+    return true;
+  }
+
+  boolean drop() {
+    sem.release();
+    return false;
+  }
 }
 
-public class Ex153Solution {
-    static Chopstick c2 = new Chopstick();
-    static Chopstick c4 = new Chopstick();
-    static Chopstick c6 = new Chopstick();
-    static Chopstick c8 = new Chopstick();
+class Philosopher implements Runnable {
+  String name;
+  Chopstick left;
+  Chopstick right;
+  boolean hasLeftChopstick;
+  boolean hasRightChopstick;
+  Thread t;
+
+  Philosopher(String name, Chopstick left, Chopstick right) {
+    this.name = name;
+    this.left = left;
+    this.right = right;
+    hasLeftChopstick = false;
+    hasRightChopstick = false;
+    t = new Thread(this, "name");
+    t.start();
+  }
+
+  @Override
+  public void run() {
+    while (true) {
+      try {
+        System.out.println(name + " is acquiring left chopstick, " + left.name);
+        hasLeftChopstick = left.get();
+        System.out.println(name + " acquired left chopstick " + left.name);
 
 
-    public static void main(String[] args) {
-        Philosopher p1 = new Philosopher("Nelson", c8, c2);
-        Philosopher p3 = new Philosopher("Tsvete", c2, c4);
-        Philosopher p5 = new Philosopher("Stephen", c4, c6);
-        Philosopher p7 = new Philosopher("Marianne", c6, c8);
+
+        System.out.println(name + " is acquiring right chopstick, " + right.name);
+        hasRightChopstick = right.get();
+        System.out.println(name + " acquired right chopstick " + right.name);
 
 
+
+
+
+        System.out.println(name + " is eating...");
+        Thread.sleep(1000);
+        System.out.println(name + " is dropping left chopstick, " + left.name);
+        hasLeftChopstick = left.drop();
+        System.out.println(name + " dropped left chopstick " + left.name);
+        System.out.println(name + " is dropping right chopstick, " + right.name);
+        hasRightChopstick = right.drop();
+        System.out.println(name + " dropped right chopstick " + right.name);
+        System.out.println(name + " is resting...");
+        Thread.sleep(2000);
+      } catch (InterruptedException e) {
+        System.out.println(e);
+      }
     }
+  }
 }
+
