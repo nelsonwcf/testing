@@ -1,78 +1,78 @@
 package careercup;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class NoTwoConsecutiveCharactersTheSameSolution {
-  static String possibleIntercalation(String str) {
-
-    // Bucketsorting by frequencies
-    int[] freqArr = new int[128];
-    Arrays.fill(freqArr, 0);
-
-    for (int i = 0; i < str.length(); i++) {
-      freqArr[(int) str.charAt(i)]++;
-    }
-
-    TreeMap<Integer, TreeSet<Character>> hm = new TreeMap<>((a, b) -> a.compareTo(b) * -1);
-    for (int i = 0; i < 128; i++) {
-      if (freqArr[i] > 0) {
-        if (!hm.containsKey(freqArr[i])) {
-          TreeSet<Character> ts = new TreeSet<>();
-          ts.add((char) i);
-          hm.put(freqArr[i], ts);
-        } else {
-          hm.get(freqArr[i]).add((char) i);
-        }
-      }
-    }
-    StringBuilder aux = new StringBuilder();
-    for (TreeSet<Character> t : hm.values()) {
-      for (char c : t) {
-        while (freqArr[(int) c] > 0) {
-          aux.append(c);
-          freqArr[(int) c]--;
-        }
-      }
-    }
-
-    StringBuilder result = new StringBuilder();
-    for (int i = 0; i < str.length() - 1; i++) {
-      char c = aux.charAt(0);
-      aux.deleteCharAt(0);
-
-      boolean foundOne = false;
-      int j = 0;
-      while (j < aux.length()  && !foundOne) {
-        if (aux.charAt(0) == c) {
-          result.append(c);
-          foundOne = true;
-        }
-        else {
-          aux = rotateString(aux, 1);
-        }
-        j++;
-      }
-      if (!foundOne && aux.length() > 1) {
-        return "";
-      }
-    }
-    result.append(aux);
-    return result.toString();
-  }
-
-  private static StringBuilder rotateString(StringBuilder str, int pos) {
-    if (str == null || str.length() == 1) {
+  // Logic: if the highest frequency character count is lesser or equal
+  // to the sum of all other frequencies + 1, it is possible to find a
+  // permutation in which no two repeated characters exist
+  static String stringIntercalation(String str) {
+    if (str == null || str.length() <= 1) {
       return str;
     }
-    pos = pos % str.length();
 
+    // Frequency count
+    HashMap<Character, Integer> freq = new HashMap<>();
+    int maxFreq = 0;
+    for (int i = 0; i < str.length(); i++) {
+      Character c = str.charAt(i);
+      if (!freq.containsKey(str.charAt(i))) {
+        freq.put(c, 1);
+        if (maxFreq == 0) {
+          maxFreq = 1;
+        }
+      } else {
+        freq.put(c, freq.get(c) + 1);
+        if (maxFreq < freq.get(c)) {
+          maxFreq = freq.get(c);
+        }
+      }
+    }
+
+    // Check if such an array exists
+    Integer total = 0;
+    Character maxFreqChar = '\0';
+    for (Character c : freq.keySet()) {
+      if (maxFreq == freq.get(c)) {
+        maxFreqChar = c;
+      }
+      total += freq.get(c);
+    }
+    total = total - maxFreq;
+    if (maxFreq > total + 1) {
+      return "";
+    }
+
+    // Get one possibility for this array
     StringBuilder sb = new StringBuilder();
-    sb.append(str.substring(pos, str.length())).append(str.substring(0, pos));
-    return sb;
+    freq.remove(maxFreqChar);
+    while (!freq.isEmpty()) {
+      // Iterator required to modify Collection while iterating through it
+      Iterator<Character> iter = freq.keySet().iterator();
+      while (iter.hasNext()) {
+        Character c = iter.next();
+        sb.append(c);
+        if (maxFreq > 0) {
+          sb.append(maxFreqChar);
+          maxFreq--;
+        }
+        if (freq.get(c) > 1) {
+          freq.put(c, freq.get(c) - 1);
+        } else {
+          iter.remove();
+        }
+      }
+    }
+    if (maxFreq > 0) {
+      sb.insert(0, maxFreqChar);
+    }
+    return sb.toString();
   }
+
 
   public static void main(String[] args) {
-    System.out.println(possibleIntercalation("baa"));
+    System.out.println(stringIntercalation("google"));
   }
-
 }
