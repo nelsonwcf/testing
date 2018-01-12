@@ -1,7 +1,5 @@
 package careercup;
 
-import sun.reflect.generics.tree.Tree;
-
 import java.util.*;
 
 public class NoTwoConsecutiveCharactersTheSameSolution {
@@ -38,22 +36,27 @@ public class NoTwoConsecutiveCharactersTheSameSolution {
     }
 
     StringBuilder result = new StringBuilder();
-    int iterations = aux.length() - 1;
-    back:
-    for (int i = 0; i <= iterations; i++) {
-      char c = aux.charAt(i);
+    for (int i = 0; i < str.length() - 1; i++) {
+      char c = aux.charAt(0);
       aux.deleteCharAt(0);
-      for (int j = 0; j <= aux.length(); j++) {
-        if (aux.charAt(0) != c) {
+
+      boolean foundOne = false;
+      int j = 0;
+      while (j < aux.length()  && !foundOne) {
+        if (aux.charAt(0) == c) {
           result.append(c);
-          break back;
+          foundOne = true;
         }
         else {
-          aux = rotateString(aux,1);
+          aux = rotateString(aux, 1);
         }
+        j++;
       }
-      return "";
+      if (!foundOne && aux.length() > 1) {
+        return "";
+      }
     }
+    result.append(aux);
     return result.toString();
   }
 
@@ -69,7 +72,7 @@ public class NoTwoConsecutiveCharactersTheSameSolution {
   }
 
   public static void main(String[] args) {
-    System.out.println(possibleIntercalation("baaa"));
+    System.out.println(possibleIntercalation("baa"));
   }
 
 }
