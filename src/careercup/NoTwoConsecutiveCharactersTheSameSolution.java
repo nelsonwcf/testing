@@ -1,7 +1,5 @@
 package careercup;
 
-import sun.reflect.generics.tree.Tree;
-
 import java.util.*;
 
 public class NoTwoConsecutiveCharactersTheSameSolution {
@@ -37,6 +35,8 @@ public class NoTwoConsecutiveCharactersTheSameSolution {
       }
     }
 
+
+
     StringBuilder result = new StringBuilder();
     int iterations = aux.length() - 1;
     back:
@@ -46,7 +46,7 @@ public class NoTwoConsecutiveCharactersTheSameSolution {
       for (int j = 0; j <= aux.length(); j++) {
         if (aux.charAt(0) != c) {
           result.append(c);
-          break back;
+          continue back;
         }
         else {
           aux = rotateString(aux,1);
