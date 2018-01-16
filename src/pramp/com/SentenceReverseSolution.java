@@ -22,25 +22,19 @@ public class SentenceReverseSolution {
       j++;
     }
 
-    //
+    // find the next space and reverse everything between i and j
     while (j < arr.length) {
-      while (arr[j] != ' ' && j < arr.length - 1) {
+      while (j < arr.length && arr[j] != ' ') {
         j++;
       }
       mirror(arr, i, j - 1);
-      while (arr[j] == ' ') {
-        j++;
-      }
-      i = j;
-    }
-
-    if (arr[j] != ' ') {
-      mirror(arr, i, j);
+      i = j + 1;
+      j = i;
     }
 
     return arr;
   }
-
+  // reverses the characters from startIndex and endIndex in arr
   private static void mirror(char[] arr, int startIndex, int endIndex) {
     while (startIndex < endIndex) {
       char c = arr[startIndex];
@@ -53,7 +47,7 @@ public class SentenceReverseSolution {
 
 
   public static void main(String[] args) {
-    char[] arr = {'p', 'e', 'r', 'f', 'e', 'c', 't', ' ', 'm', 'a', 'k', 'e', 's', ' ', 'p', 'r', 'a', 'c', 't', 'i', 'c', 'e'};
-    Arrays.toString(reverseWords(arr));
+    char[] arr = {'p', 'e', 'r', 'f', 'e', 'c', 't', ' ', ' ', 'm', 'a', 'k', 'e', 's', ' ', 'p', 'r', 'a', 'c', 't', 'i', 'c', 'e'};
+    System.out.println(Arrays.toString(reverseWords(arr)));
   }
 }
