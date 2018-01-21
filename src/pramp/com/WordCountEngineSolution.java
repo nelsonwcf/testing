@@ -1,73 +1,79 @@
 package pramp.com;
 
-import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class WordCountEngineSolution {
-
+  // runtime complexity: O(n), space complexity: O(n)
   static String[][] wordCountEngine(String document) {
-    if (document == null || document.isEmpty()) {
-      return null;
+    if (document == null || document.length() == 0) {
+      return new String[0][0];
     }
 
-    // String tokenization - remove punctuation and splits by whitespace
-    String[] tokens = document.toLowerCase().replaceAll("[^a-z0-9 ]", "").split("\\s+");
+    // strip punctuation
+    String[] tokens = document.trim().toLowerCase().replaceAll("[^a-z ]", "").split("\\s+");
 
-    // Construct map to store frequencies and a list to store order of appearance
-    HashMap<String, Integer> wordCountDictionary = new HashMap<>();
-    ArrayList<String> orderOfAppearance = new ArrayList<>();
+    // create data structure to capture frequency (wordCount)
+    // and order of appearance (wordList)
+    HashMap<String, Integer> wordCount = new HashMap<>();
+    ArrayList<String> wordList = new ArrayList<>();
 
-    for (String str : tokens) {
-      if (!wordCountDictionary.containsKey(str)) {
-        wordCountDictionary.put(str, 1);
-        orderOfAppearance.add(str);
+    // holds greatest frequency found
+    int maxFreq = 1;
+
+    // populate data structure
+    for (String s : tokens) {
+      if (!wordCount.containsKey(s)) {
+        wordCount.put(s, 1);
+        wordList.add(s);
       } else {
-        wordCountDictionary.put(str, wordCountDictionary.get(str) + 1);
+        int n = wordCount.get(s);
+        wordCount.put(s, n + 1);
+        if (maxFreq < n + 1) {
+          maxFreq = n + 1;
+        }
       }
     }
 
-    // Build the array of queues, with size = max of frequencies used for the bucket sort
-    int maxFreq = 0;
-    for (Integer i : wordCountDictionary.values()) {
-      maxFreq = i > maxFreq ? i : maxFreq;
-    }
-    ArrayDeque<String>[] bucketArray = new ArrayDeque[maxFreq + 1];
+    // buckets of frequencies; strings buckets ordered by order of appearance
+    @SuppressWarnings("unchecked")
+    ArrayList<String>[] bucketArray = new ArrayList[maxFreq + 1];
 
-    // Adds the words in order of appearance to the buckets
-    for (String s : orderOfAppearance) {
-      int freqIndex = wordCountDictionary.get(s);
-      if (bucketArray[freqIndex] == null) {
-        bucketArray[freqIndex] = new ArrayDeque<String>();
+    // populate bucket array
+    for (String s : wordList) { // runtime: O(n)
+      int index = wordCount.get(s);
+      if (bucketArray[index] == null) {
+        bucketArray[index] = new ArrayList<String>();
       }
-      bucketArray[freqIndex].addFirst(s);
+      bucketArray[index].add(s);
     }
 
-    // Finally generate the return string;
-    String[][] frequencies = new String[wordCountDictionary.size()][2];
+    // array to return
+    String[][] results = new String[wordList.size()][2];
 
-    int frequenciesIndex = 0;
-    for (int i = maxFreq; i >= 0; i--) {
-      while (bucketArray[i] != null && !bucketArray[i].isEmpty()) {
-        frequencies[frequenciesIndex][0] = bucketArray[i].removeLast();
-        frequencies[frequenciesIndex][1] = wordCountDictionary.get(frequencies[frequenciesIndex][0]).toString();
-        frequenciesIndex++;
+    int j = maxFreq;
+    int i = 0;
+    while (i < results.length) {
+      // iterate through bucketArray populating results
+      while (bucketArray[j] != null && bucketArray[j].size() > 0) {
+        results[i][0] = bucketArray[j].remove(0);
+        results[i][1] = Integer.toString(j);
+        i++;
       }
+      j--;
     }
-    return frequencies;
+
+    return results;
   }
 
   public static void main(String[] args) {
-    String document = "Every book is a quotation; and every house is a quotation out of all forests, and mines, and stone quarries; and every man is a quotation from all his ancestors. ";
-
-    String[][] freq = wordCountEngine(document);
-
-    System.out.print("[ ");
-    for (int row = 0; row < freq.length; row++) {
-      System.out.print("[" + freq[row][0] + "," + freq[row][1] + "]");
-      if (row < freq.length - 1) {
-        System.out.print(",");
+    String document = "Practice makes perfect. you'll only get Perfect by practice. just practice!";
+    String[][] res = wordCountEngine(document);
+    for (int i = 0; i < res.length; i++) {
+      for (int j = 0; j < 2; j++) {
+        System.out.print(res[i][j] + " ");
       }
+      System.out.println();
     }
-    System.out.println(" ]");
   }
 }
