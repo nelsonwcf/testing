@@ -12,12 +12,12 @@ public class MaximumSubsetSumSolution {
 
     int currentTotal = 0;
     int maxTotal = 0;
-    for (int i = 0; i < arr.length; i++) {
-      if (arr[i] < currentTotal + arr[i]) {
-        currentTotal += arr[i];
+    for (int anArr : arr) {
+      if (anArr < currentTotal + anArr) {
+        currentTotal += anArr;
       }
       else {
-        currentTotal = arr[i];
+        currentTotal = anArr;
       }
       if (maxTotal < currentTotal) {
         maxTotal = currentTotal;
