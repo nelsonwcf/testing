@@ -72,7 +72,7 @@ public class LinkedList<T> implements Iterable<T> {
 //      while (aux != null) {
 //        values[i] = (T) aux.value;
 //        i++;
-//        aux = aux.next;
+//        aux = aux.last;
 //      }
 //      return Arrays.asList(values).iterator();
 //    }
