@@ -1,22 +1,23 @@
 package custom.structures;
 
-class FullQueueException extends RuntimeException {
-  FullQueueException() {
-    super();
-  }
-}
-
-class EmptyQueueException extends RuntimeException {
-  EmptyQueueException() {
-    super();
-  }
-}
-
 public class CircularQueue<T> {
+
   private int size;
   private T[] arr;
   private int first;
   private int last;
+
+  static class FullQueueException extends RuntimeException {
+    FullQueueException() {
+      super();
+    }
+  }
+
+  static class EmptyQueueException extends RuntimeException {
+    EmptyQueueException() {
+      super();
+    }
+  }
 
   @SuppressWarnings("unchecked")
   public CircularQueue(int size) {
@@ -24,6 +25,10 @@ public class CircularQueue<T> {
     arr = (T[]) new Object[size];
     first = 0;
     last = arr.length - 1;
+  }
+
+  public static <T> CircularQueue<T> newInstance(int size) {
+    return new CircularQueue<>(size);
   }
 
   public boolean isEmpty() {

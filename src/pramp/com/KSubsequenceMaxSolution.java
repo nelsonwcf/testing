@@ -12,7 +12,9 @@ public class KSubsequenceMaxSolution {
     }
 
     int[] result = new int[arr.length - k + 1];
-    CircularQueue<Integer> cq = new CircularQueue<>(k);
+
+    // substituted public constructor to static factory method for testing
+    CircularQueue<Integer> cq = CircularQueue.newInstance(k);
 
     // for each element in the array, check previous elements in the queue
     // are smaller than the current one. if so, replace them by the current one
