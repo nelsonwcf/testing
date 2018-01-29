@@ -1,6 +1,6 @@
 package effective.java;
 
-public class ParameterizedObject {
+public class BuilderPatternTest {
   private final int r0;
   private final int r1;
   private final int o1;
@@ -30,12 +30,12 @@ public class ParameterizedObject {
       return this;
     }
 
-    public ParameterizedObject build() {
-      return new ParameterizedObject(this);
+    public BuilderPatternTest build() {
+      return new BuilderPatternTest(this);
     }
   }
 
-  private ParameterizedObject(Builder builder) {
+  private BuilderPatternTest(Builder builder) {
     r0 = builder.r0;
     r1 = builder.r1;
     o1 = builder.o1;
@@ -43,6 +43,6 @@ public class ParameterizedObject {
   }
 
   public static void main(String[] args) {
-    ParameterizedObject O1 = new ParameterizedObject.Builder(10,20).seto1(5).build();
+    BuilderPatternTest O1 = new BuilderPatternTest.Builder(10,20).seto1(5).build();
   }
 }
