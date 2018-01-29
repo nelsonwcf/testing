@@ -1,52 +1,71 @@
 package careercup;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ShortestArrayOfStrings {
-  static String[] getShortedArray(String[] words, String[] keywords) {
+  static ArrayList<String> getShortedArray(String[] words, String[] keywords) {
     if (words == null || keywords == null || words.length == 0 || keywords.length == 0 || keywords.length > words.length) {
-      return new String[0];
+      return new ArrayList<String>();
     }
 
-    // create a hashMap of string and a hashmap counter to avoid traversing it all the time
+    // create a hashMap of string and a hashMap counter to avoid traversing it all the time
     HashMap<String, Integer> freqMap = new HashMap<>();
     int freqCounter = 0;
 
-    // initialize the hashmap with the keywords
+    // initialize the hashMap with the keywords
     for (String s : keywords) {
       freqMap.put(s, 0);
     }
 
     // create two iterators
-    int frontRunner = 0;
     int backRunner = 0;
+    int frontRunner = 0;
+    int minRunner = 0;
+    int maxRunner = words.length;
 
     // move the front iterator adding the strings to the HashMap
-    while (freqCounter < keywords.length && frontRunner < words.length) {
+    while (frontRunner < words.length) {
       String currentWord = words[frontRunner];
       if (freqMap.containsKey(currentWord)) {
         if (freqMap.get(currentWord) == 0) {
           freqCounter++;
         }
-        freqMap.put(currentWord, freqMap.get(currentWord + 1));
+      }
+
+      if (freqCounter == keywords.length) {
+        while (!freqMap.containsKey(words[backRunner]) || freqMap.get(words[backRunner]) != 1) {
+          String backWord = words[backRunner];
+          if (freqMap.containsKey(backWord)) {
+            freqMap.put(backWord, freqMap.get(backWord) - 1);
+          }
+          backRunner++;
+        }
+        if (maxRunner - minRunner > frontRunner - backRunner) {
+          maxRunner = frontRunner;
+          minRunner = backRunner;
+        }
       }
       frontRunner++;
     }
 
     if (freqCounter < keywords.length) {
-      return new String[0];
+      return new ArrayList<String>();
     }
 
-    // if the frequency would get to 0, than instead move the front runner again
-    String backWord = words[backRunner];
-    while (freqMap.get(backWord) != 1) {
-      if (freqMap.containsKey(backWord)) {
-        freqMap.put(backWord, freqMap.get(backWord) - 1);
-      }
+    ArrayList<String> al = new ArrayList<>();
+    for (int i = minRunner; i <= maxRunner; i++) {
+      al.add(words[i]);
     }
 
-
-    // to that until the front runner reached end or the every word counts to one
-    return new String[0];
+    return al;
   }
+
+  public static void main(String[] args) {
+    String[] words = {"a","b","b","b","b","c","c"};
+    String[] keywords = {"a","b"};
+
+    System.out.println(getShortedArray(words, keywords));
+  }
+
 }
