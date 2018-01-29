@@ -6,64 +6,77 @@ import java.util.HashMap;
 public class ShortestArrayOfStrings {
   static ArrayList<String> getShortedArray(String[] words, String[] keywords) {
     if (words == null || keywords == null || words.length == 0 || keywords.length == 0 || keywords.length > words.length) {
-      return new ArrayList<String>();
+      return new ArrayList<>();
     }
 
     // create a hashMap of string and a hashMap counter to avoid traversing it all the time
     HashMap<String, Integer> freqMap = new HashMap<>();
-    int freqCounter = 0;
+    int found = 0;
 
     // initialize the hashMap with the keywords
     for (String s : keywords) {
       freqMap.put(s, 0);
     }
 
-    // create two iterators
+    // frontRunner and backRunner are the iterators the create the sliding windows
+    // minFrontRunner and minBackRunner saves the positions of the frontRunner
+    // and backRunner that makes the smallest size
     int backRunner = 0;
     int frontRunner = 0;
-    int minRunner = 0;
-    int maxRunner = words.length;
+    int minFrontRunner = 0;
+    int minBackRunner = 0;
+    int size = Integer.MAX_VALUE;
 
-    // move the front iterator adding the strings to the HashMap
+    // iterate through words array until the one subset that satisfies is found
     while (frontRunner < words.length) {
       String currentWord = words[frontRunner];
       if (freqMap.containsKey(currentWord)) {
         if (freqMap.get(currentWord) == 0) {
-          freqCounter++;
+          found++;
         }
+        freqMap.put(currentWord, freqMap.get(currentWord) + 1);
       }
 
-      if (freqCounter == keywords.length) {
-        while (!freqMap.containsKey(words[backRunner]) || freqMap.get(words[backRunner]) != 1) {
-          String backWord = words[backRunner];
+      // check if the the current subset by iterating the backRunner
+      // until is reaches a required character that is unique in the subset
+      if (found == keywords.length) {
+        String backWord = words[backRunner];
+        while (!freqMap.containsKey(backWord) || freqMap.get(backWord) > 1) {
           if (freqMap.containsKey(backWord)) {
             freqMap.put(backWord, freqMap.get(backWord) - 1);
           }
           backRunner++;
+          backWord = words[backRunner];
         }
-        if (maxRunner - minRunner > frontRunner - backRunner) {
-          maxRunner = frontRunner;
-          minRunner = backRunner;
+
+        // after finding this new subset, checks if it is smaller than the
+        // the current subset. if so, replaces it.
+        if (frontRunner - backRunner + 1 < size) {
+          size = frontRunner - backRunner + 1;
+          minBackRunner = backRunner;
+          minFrontRunner = frontRunner;
         }
       }
+      // increment frontRunner until it finished the words array
       frontRunner++;
     }
 
-    if (freqCounter < keywords.length) {
-      return new ArrayList<String>();
+    // if no subset was found by the end of the words array, return empty subset
+    if (found < keywords.length) {
+      return new ArrayList<>();
     }
 
-    ArrayList<String> al = new ArrayList<>();
-    for (int i = minRunner; i <= maxRunner; i++) {
-      al.add(words[i]);
+    // if found, create a list and insert the subarray in it and returns
+    ArrayList<String> result = new ArrayList<>();
+    for (int i = minBackRunner; i <= minFrontRunner; i++) {
+      result.add(words[i]);
     }
-
-    return al;
+    return result;
   }
 
   public static void main(String[] args) {
-    String[] words = {"a","b","b","b","b","c","c"};
-    String[] keywords = {"a","b"};
+    String[] words = {"a", "b", "b", "c", "b", "a"};
+    String[] keywords = {"a", "b", "c"};
 
     System.out.println(getShortedArray(words, keywords));
   }
