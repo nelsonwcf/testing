@@ -13,34 +13,24 @@ public class TripleTupleSolution {
     }
 
     // create the left hashMap O(n^2)
-    HashMap<Integer, ArrayList<Pair<Integer, Integer>>> leftMap = new HashMap<>();
-    HashMap<Integer, ArrayList<Pair<Integer, Integer>>> rightMap = new HashMap<>();
-    int counter = 0;
+    HashMap<Integer, HashMap<Integer, Integer>> leftMap = new HashMap<>();
+    HashMap<Integer, HashMap<Integer, Integer>> rightMap = new HashMap<>();
     for (int i = 0; i < arr.length; i++) {
       for (int j = i + 1; j < arr.length; j++) {
-        int l = arr.length - 1 - i;
-        int k = l - 1;
-        if (arr[i] + arr[j] + arr[k] == arr[l]) {
-          counter++;
-        }
-      }
-    }
-          /*
-          int sumLeft = arr[i] + arr[j];
-          int sumRight = arr[l] - arr[k];
+        int sumLeft = arr[i] + arr[j];
+        int sumRight = arr[j] - arr[i];
 
-          if (!leftMap.containsKey(sumLeft)) {
-            leftMap.put(sumLeft, new ArrayList<>());
-            leftMap.get(sumLeft).add(new Pair<>(i, j));
-          } else {
-            leftMap.get(sumLeft).add(new Pair<>(i, j));
-          }
-          if (!rightMap.containsKey(sumRight)) {
-            rightMap.put(sumRight, new ArrayList<>());
-            rightMap.get(sumRight).add(new Pair<>(k, l));
-          } else {
-            rightMap.get(sumRight).add(new Pair<>(k, l));
-          }
+        if (!leftMap.containsKey(sumLeft)) {
+          leftMap.put(sumLeft, new HashMap<>());
+          leftMap.get(sumLeft).put();
+        } else {
+          leftMap.get(sumLeft).add(new Pair<>(i, j));
+        }
+        if (!rightMap.containsKey(sumRight)) {
+          rightMap.put(sumRight, new ArrayList<>());
+          rightMap.get(sumRight).add(new Pair<>(i, j));
+        } else {
+          rightMap.get(sumRight).add(new Pair<>(i, j));
         }
       }
     }
@@ -52,10 +42,9 @@ public class TripleTupleSolution {
         tuples += leftMap.get(i).size() * rightMap.get(i).size();
       }
     }
-*/
 
 
-    return counter;
+    return tuples;
   }
 
   static int getNumberOfTuplesBrute(int[] arr) {
@@ -80,6 +69,7 @@ public class TripleTupleSolution {
 
   public static void main(String[] args) {
     int[] arr = {1, 1, 1, 3, 1, 5};
-    System.out.println(getNumberOfTuplesBrute(arr));
+    System.out.println("returned: " +  getNumberOfTuple(arr));
+    System.out.println("expected: " + getNumberOfTuplesBrute(arr));
   }
 }
