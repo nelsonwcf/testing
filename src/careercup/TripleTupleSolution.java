@@ -1,9 +1,6 @@
 package careercup;
 
-import javafx.util.Pair;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class TripleTupleSolution {
@@ -12,39 +9,50 @@ public class TripleTupleSolution {
       return 0;
     }
 
-    // create the left hashMap O(n^2)
-    HashMap<Integer, HashMap<Integer, Integer>> leftMap = new HashMap<>();
-    HashMap<Integer, HashMap<Integer, Integer>> rightMap = new HashMap<>();
+    // create the two hashMap used to track the pairs (i,j) and (k,l)
+    HashMap<Integer, ArrayList<Integer>> leftMap = new HashMap<>();
+    HashMap<Integer, ArrayList<Integer>> rightMap = new HashMap<>();
+    // traverse the array -> O(n^2)
     for (int i = 0; i < arr.length; i++) {
       for (int j = i + 1; j < arr.length; j++) {
-        int sumLeft = arr[i] + arr[j];
-        int sumRight = arr[j] - arr[i];
-
-        if (!leftMap.containsKey(sumLeft)) {
-          leftMap.put(sumLeft, new HashMap<>());
-          leftMap.get(sumLeft).put();
-        } else {
-          leftMap.get(sumLeft).add(new Pair<>(i, j));
+        // leftSum holds the combination (i,j)
+        int leftSum = arr[i] + arr[j];
+        // populate the (i,j) hashmap with sums and position of j (to be matched later)
+        // the hashMap will hold the sums and treeMap the sorted frequencies
+        if (!leftMap.containsKey(leftSum)) {
+          leftMap.put(leftSum, new ArrayList<>());
         }
-        if (!rightMap.containsKey(sumRight)) {
-          rightMap.put(sumRight, new ArrayList<>());
-          rightMap.get(sumRight).add(new Pair<>(i, j));
-        } else {
-          rightMap.get(sumRight).add(new Pair<>(i, j));
+        leftMap.get(leftSum).add(j);
+
+        // rightSum holds the combination (k,l)
+        int rightSum = arr[j] - arr[i];
+        // populate the (k,l) hashMap with sums and position of i (to be matched later)
+        // the hashMap will hold the sums and treeMap the sorted frequencies
+        if (!rightMap.containsKey(rightSum)) {
+          rightMap.put(rightSum, new ArrayList<>());
+        }
+        rightMap.get(rightSum).add(i);
+      }
+    }
+
+    // look if any leftMap key exists in rightMap
+    // if it does, compare elements of each ArrayList
+    // incrementing counter when rightMap element is greater than lefMap element
+    // complexity here is O(n^3)
+    int counter = 0;
+    for (Integer sum : leftMap.keySet()) {
+      if (rightMap.containsKey(sum)) {
+        for (Integer j : leftMap.get(sum)) {
+          for (Integer i : rightMap.get(sum)) {
+            if (j < i) {
+              counter++;
+            }
+          }
         }
       }
     }
 
-    // count matches
-    int tuples = 0;
-    for (Integer i : leftMap.keySet()) {
-      if (rightMap.containsKey(i)) {
-        tuples += leftMap.get(i).size() * rightMap.get(i).size();
-      }
-    }
-
-
-    return tuples;
+    return counter;
   }
 
   static int getNumberOfTuplesBrute(int[] arr) {
@@ -67,9 +75,37 @@ public class TripleTupleSolution {
     return counter;
   }
 
+  public static int binarySearchFirstLeft(int[] arr, int value) {
+    if (arr == null || arr.length == 0) {
+      return -1;
+    }
+
+    int left = 0;
+    int right = arr.length - 1;
+    int mid = (left + right) / 2;
+
+    while (left <= right) {
+      if (arr[mid] == value) {
+        if (mid - 1 >= 0 && arr[mid - 1] < value || mid - 1 < 0) {
+          return mid;
+        } else {
+          right = mid - 1;
+          mid = (left + right) / 2;
+        }
+      } else if (arr[mid] > value) {
+        right = mid - 1;
+        mid = (left + right) / 2;
+      } else {
+        left = mid + 1;
+        mid = (left + right) / 2;
+      }
+    }
+    return -1;
+  }
+
   public static void main(String[] args) {
-    int[] arr = {1, 1, 1, 3, 1, 5};
-    System.out.println("returned: " +  getNumberOfTuple(arr));
-    System.out.println("expected: " + getNumberOfTuplesBrute(arr));
+    int[] arr = {1,2,4,8,16,32,64,128,256,512,1024};
+    System.out.println(getNumberOfTuplesBrute(arr));
+    System.out.println(getNumberOfTuple(arr));
   }
 }
