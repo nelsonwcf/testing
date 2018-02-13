@@ -9,50 +9,66 @@ public class TripleTupleSolution {
       return 0;
     }
 
-    // create the two hashMap used to track the pairs (i,j) and (k,l)
     HashMap<Integer, ArrayList<Integer>> leftMap = new HashMap<>();
-    HashMap<Integer, ArrayList<Integer>> rightMap = new HashMap<>();
-    // traverse the array -> O(n^2)
-    for (int i = 0; i < arr.length; i++) {
-      for (int j = i + 1; j < arr.length; j++) {
-        // leftSum holds the combination (i,j)
+    for (int j = 1; j < arr.length; j++) {
+      for (int i = 0; i < j; i++) {
         int leftSum = arr[i] + arr[j];
-        // populate the (i,j) hashmap with sums and position of j (to be matched later)
-        // the hashMap will hold the sums and treeMap the sorted frequencies
         if (!leftMap.containsKey(leftSum)) {
           leftMap.put(leftSum, new ArrayList<>());
         }
         leftMap.get(leftSum).add(j);
-
-        // rightSum holds the combination (k,l)
-        int rightSum = arr[j] - arr[i];
-        // populate the (k,l) hashMap with sums and position of i (to be matched later)
-        // the hashMap will hold the sums and treeMap the sorted frequencies
-        if (!rightMap.containsKey(rightSum)) {
-          rightMap.put(rightSum, new ArrayList<>());
-        }
-        rightMap.get(rightSum).add(i);
       }
     }
 
-    // look if any leftMap key exists in rightMap
-    // if it does, compare elements of each ArrayList
-    // incrementing counter when rightMap element is greater than lefMap element
-    // complexity here is O(n^3)
-    int counter = 0;
-    for (Integer sum : leftMap.keySet()) {
-      if (rightMap.containsKey(sum)) {
-        for (Integer j : leftMap.get(sum)) {
-          for (Integer i : rightMap.get(sum)) {
-            if (j < i) {
-              counter++;
+    int total = 0;
+    for (int k = 0; k < arr.length; k++) {
+      for (int l = k; l < arr.length; l++) {
+        int rightSum = arr[l] - arr[k];
+        if (leftMap.containsKey(rightSum)) {
+          for (Integer j : leftMap.get(rightSum)) {
+            if (j < k) {
+              total += leftMap.get(rightSum).get(j);
             }
           }
         }
       }
     }
 
-    return counter;
+    /*
+    // create the two hashMap used to track the pairs (i,j) and (k,l)
+    HashMap<Integer, HashMap<Integer, Integer>> leftMap = new HashMap<>();
+    // traverse the array -> runtime O(n^2), space O(n^2)
+    for (int i = 0; i < arr.length; i++) {
+      for (int j = i + 1; j < arr.length; j++) {
+        // leftSum holds the combination (i,j)
+        int leftSum = arr[i] + arr[j];
+        if (!leftMap.containsKey(leftSum)) {
+          leftMap.put(leftSum, new HashMap<>());
+        }
+        if (!leftMap.get(leftSum).containsKey(j)) {
+          leftMap.get(leftSum).put(j, 1);
+        } else {
+          leftMap.get(leftSum).put(j, 1 + leftMap.get(leftSum).get(j));
+        }
+      }
+    }
+
+
+    int total = 0;
+    for (int k = 0; k < arr.length; k++) {
+      for (int l = k; l < arr.length; l++) {
+        int rightSum = arr[l] - arr[k];
+        if (leftMap.containsKey(rightSum)) {
+          for (Integer j : leftMap.get(rightSum).keySet()) {
+            if (j < k) {
+              total += leftMap.get(rightSum).get(j);
+            }
+          }
+        }
+      }
+    }
+    */
+    return total;
   }
 
   static int getNumberOfTuplesBrute(int[] arr) {
@@ -104,8 +120,8 @@ public class TripleTupleSolution {
   }
 
   public static void main(String[] args) {
-    int[] arr = {1,2,4,8,16,32,64,128,256,512,1024};
+    int[] arr = {1, 1, 1, 1, 3, 5};
     System.out.println(getNumberOfTuplesBrute(arr));
-    System.out.println(getNumberOfTuple(arr));
+//    System.out.println(getNumberOfTuple(arr));
   }
 }
