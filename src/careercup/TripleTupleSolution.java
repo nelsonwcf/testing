@@ -4,70 +4,55 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TripleTupleSolution {
+  // calculate arr[i] + arr[j] and put in a map,
+  // check if arr[l] - arr[k] is in the map
+  // and if so, j < k.
+  // Runtime: O(n^2); Space: O(n^2)
   static int getNumberOfTuple(int[] arr) {
     if (arr == null || arr.length < 4) {
       return 0;
     }
 
+    // hashmap to hold sum of arr[i] + arr[j]
     HashMap<Integer, ArrayList<Integer>> leftMap = new HashMap<>();
+    // traverse the matrix vertically so that the js add to the list
+    // will be sorted
     for (int j = 1; j < arr.length; j++) {
       for (int i = 0; i < j; i++) {
         int leftSum = arr[i] + arr[j];
         if (!leftMap.containsKey(leftSum)) {
-          leftMap.put(leftSum, new ArrayList<>());
+          // al holds the current index in position 0
+          // current index points to the first effective element
+          ArrayList<Integer> al = new ArrayList<>();
+          al.add(1);
+          leftMap.put(leftSum, al);
         }
+        // add the j of the sum to the list under the sum key
         leftMap.get(leftSum).add(j);
       }
     }
 
     int total = 0;
     for (int k = 0; k < arr.length; k++) {
-      for (int l = k; l < arr.length; l++) {
+      for (int l = k + 1; l < arr.length; l++) {
         int rightSum = arr[l] - arr[k];
         if (leftMap.containsKey(rightSum)) {
-          for (Integer j : leftMap.get(rightSum)) {
-            if (j < k) {
-              total += leftMap.get(rightSum).get(j);
-            }
+          ArrayList<Integer> al = leftMap.get(rightSum);
+          int index = al.get(0);
+          // check if exist an element in the list so that j < k
+          // if it does, increments it until finding one element
+          // that is not or the end of the list
+          while (index < al.size() && al.get(index) < k) {
+            index++;
           }
+          // update the index of the list
+          al.set(0, index);
+
+          // sum all positions in which j < k, excluding position 0 (index)
+          total += index - 1;
         }
       }
     }
-
-    /*
-    // create the two hashMap used to track the pairs (i,j) and (k,l)
-    HashMap<Integer, HashMap<Integer, Integer>> leftMap = new HashMap<>();
-    // traverse the array -> runtime O(n^2), space O(n^2)
-    for (int i = 0; i < arr.length; i++) {
-      for (int j = i + 1; j < arr.length; j++) {
-        // leftSum holds the combination (i,j)
-        int leftSum = arr[i] + arr[j];
-        if (!leftMap.containsKey(leftSum)) {
-          leftMap.put(leftSum, new HashMap<>());
-        }
-        if (!leftMap.get(leftSum).containsKey(j)) {
-          leftMap.get(leftSum).put(j, 1);
-        } else {
-          leftMap.get(leftSum).put(j, 1 + leftMap.get(leftSum).get(j));
-        }
-      }
-    }
-
-
-    int total = 0;
-    for (int k = 0; k < arr.length; k++) {
-      for (int l = k; l < arr.length; l++) {
-        int rightSum = arr[l] - arr[k];
-        if (leftMap.containsKey(rightSum)) {
-          for (Integer j : leftMap.get(rightSum).keySet()) {
-            if (j < k) {
-              total += leftMap.get(rightSum).get(j);
-            }
-          }
-        }
-      }
-    }
-    */
     return total;
   }
 
@@ -91,37 +76,9 @@ public class TripleTupleSolution {
     return counter;
   }
 
-  public static int binarySearchFirstLeft(int[] arr, int value) {
-    if (arr == null || arr.length == 0) {
-      return -1;
-    }
-
-    int left = 0;
-    int right = arr.length - 1;
-    int mid = (left + right) / 2;
-
-    while (left <= right) {
-      if (arr[mid] == value) {
-        if (mid - 1 >= 0 && arr[mid - 1] < value || mid - 1 < 0) {
-          return mid;
-        } else {
-          right = mid - 1;
-          mid = (left + right) / 2;
-        }
-      } else if (arr[mid] > value) {
-        right = mid - 1;
-        mid = (left + right) / 2;
-      } else {
-        left = mid + 1;
-        mid = (left + right) / 2;
-      }
-    }
-    return -1;
-  }
-
   public static void main(String[] args) {
-    int[] arr = {1, 1, 1, 1, 3, 5};
+    int[] arr = {1, 3, 5, 9, 9, 1, 5, 19};
     System.out.println(getNumberOfTuplesBrute(arr));
-//    System.out.println(getNumberOfTuple(arr));
+    System.out.println(getNumberOfTuple(arr));
   }
 }
