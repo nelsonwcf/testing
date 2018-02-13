@@ -1,4 +1,4 @@
-package pramp.com;
+package pramp;
 
 public class BSTSuccessorSearchSolution {
   static class Node {

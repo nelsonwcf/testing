@@ -1,4 +1,4 @@
-package pramp.com;
+package pramp;
 
 import com.sun.istack.internal.NotNull;
 

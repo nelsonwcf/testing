@@ -1,4 +1,4 @@
-package pramp.com;
+package pramp;
 
 public class SalesPathSolution {
   static int recursiveCalls = 0;

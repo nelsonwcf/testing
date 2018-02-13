@@ -1,4 +1,4 @@
-package pramp.com;
+package pramp;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;

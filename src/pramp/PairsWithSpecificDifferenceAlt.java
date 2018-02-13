@@ -1,4 +1,4 @@
-package pramp.com;
+package pramp;
 
 import javafx.util.Pair;
 import java.util.ArrayList;

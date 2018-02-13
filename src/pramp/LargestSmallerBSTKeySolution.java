@@ -1,4 +1,4 @@
-package pramp.com;
+package pramp;
 
 import java.io.*;
 import java.util.*;
