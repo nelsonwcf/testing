@@ -2,6 +2,7 @@ package hackerrank;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Scanner;
 
 public class TheCoinChangeProblemSolution {
   static long getWays(long n, long[] c) {
@@ -9,41 +10,44 @@ public class TheCoinChangeProblemSolution {
       return 0;
     }
 
-    // build the frequency map
-    HashMap<Long, Integer> aux = new HashMap<>();
-    for (int i = 0; i < c.length; i++) {
-      aux.put(c[i], 0);
-    }
-
-    // result will be contained here
-    HashSet<HashMap<Long, Integer>> result = new HashSet<>();
-    HashMap<Integer,Integer> memo = new HashMap<>();
-
-    getWaysAux(n, c, result, aux, memo);
-
-    return result.size();
+    HashMap<Long, Long> memo = new HashMap<>();
+    getWaysAux(n, c, memo, 0);
+    return memo.get(n);
   }
 
-  private static void getWaysAux(long n, long[] c, HashSet<HashMap<Long, Integer>> result, HashMap<Long, Integer> aux,HashMap<Integer,Integer> memo ) {
+  private static long getWaysAux(long n, long[] c, HashMap<Long, Long> memo, int currIndex) {
+    if (memo.containsKey(n)) {
+      return memo.get(n);
+    }
+
     if (n == 0) {
-      result.add(aux);
-      return;
+      return 1;
     }
 
     if (n < 0) {
-      return;
+      return 0;
     }
 
-    for (int i = 0; i < c.length; i++) {
-      aux.put(c[i], aux.get(c[i]) + 1);
-      getWaysAux(n - c[i], c, result, aux);
-      aux.put(c[i], aux.get(c[i]) - 1);
+    long total = 0;
+    for (int i = currIndex; i < c.length; i++) {
+      total += getWaysAux(n - c[i], c, memo, i);
     }
+
+    memo.put(n, total);
+
+    return total;
   }
 
   public static void main(String[] args) {
-    long[] c = {1, 2, 3};
-    long n = 4;
-    System.out.println(getWays(n, c));
+    Scanner in = new Scanner(System.in);
+    int n = in.nextInt();
+    int m = in.nextInt();
+    long[] c = new long[m];
+    for (int c_i = 0; c_i < m; c_i++) {
+      c[c_i] = in.nextLong();
+    }
+    // Print the number of ways of making change for 'n' units using coins having the values given by 'c'
+    long ways = getWays(n, c);
+    System.out.println(ways);
   }
 }
