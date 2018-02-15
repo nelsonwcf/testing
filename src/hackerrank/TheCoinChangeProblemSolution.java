@@ -1,23 +1,27 @@
 package hackerrank;
 
+import javafx.util.Pair;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Scanner;
 
 public class TheCoinChangeProblemSolution {
+
   static long getWays(long n, long[] c) {
     if (c == null || c.length == 0 || n == 0) {
       return 0;
     }
 
-    HashMap<Long, Long> memo = new HashMap<>();
-    getWaysAux(n, c, memo, 0);
-    return memo.get(n);
+    // space complexity of O(n * c.length)
+    HashMap<Pair, Long> memo = new HashMap<>();
+    return getWaysAux(n, c, memo, 0);
   }
 
-  private static long getWaysAux(long n, long[] c, HashMap<Long, Long> memo, int currIndex) {
-    if (memo.containsKey(n)) {
-      return memo.get(n);
+  // will have to check n elements c.length times
+  // runtime complexity O(n * c.length)
+  private static long getWaysAux(long n, long[] c, HashMap<Pair, Long> memo, int currIndex) {
+    Pair p = new Pair<>(n, currIndex);
+    if (memo.containsKey(p)) {
+      return memo.get(p);
     }
 
     if (n == 0) {
@@ -33,8 +37,7 @@ public class TheCoinChangeProblemSolution {
       total += getWaysAux(n - c[i], c, memo, i);
     }
 
-    memo.put(n, total);
-
+    memo.put(p, total);
     return total;
   }
 
