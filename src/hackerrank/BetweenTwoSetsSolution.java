@@ -1,6 +1,6 @@
 package hackerrank;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -10,14 +10,16 @@ public class BetweenTwoSetsSolution {
       return 0;
     }
 
-    ArrayList<Integer> list = new ArrayList<>();
-    for (int n = 2; n <= Math.sqrt(b[0]); n++) {
+    HashSet<Integer> list = new HashSet<>();
+    for (int n = 1; n <= Math.sqrt(b[0]); n++) {
       if (b[0] % n == 0) {
         list.add(n);
+        list.add(b[0] / n);
       }
     }
-    Iterator<Integer> it = list.iterator();
+    Iterator<Integer> it;
     for (int i = 1; i < b.length; i++) {
+      it = list.iterator();
       while (it.hasNext()) {
         int n = it.next();
         if (b[i] % n != 0) {
@@ -26,8 +28,8 @@ public class BetweenTwoSetsSolution {
       }
     }
 
-    it = list.iterator();
     for (int i = 0; i < a.length; i++) {
+      it = list.iterator();
       while (it.hasNext()) {
         int n = it.next();
         if (n % a[i] != 0) {
