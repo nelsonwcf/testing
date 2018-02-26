@@ -127,7 +127,7 @@ public class EvenTreeSolution {
         tree[tree_i][tree_j] = in.nextInt();
       }
     }
-    int result = evenTree(n, m, tree);
+    int result = 0;
     System.out.println(result);
     in.close();
   }
