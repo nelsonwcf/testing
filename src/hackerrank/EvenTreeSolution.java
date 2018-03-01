@@ -1,11 +1,107 @@
 package hackerrank;
 
-import javafx.util.Pair;
-
 import java.util.*;
 
 public class EvenTreeSolution {
+  private static class Node {
+    HashMap<Node, Integer> child;
+    Node parent;
+    int value;
+    int size;
 
+    Node(int value) {
+      this.value = value;
+      child = new HashMap<>();
+      parent = null;
+    }
+
+    Node(int value, Node parent) {
+      this(value);
+      this.parent = parent;
+    }
+  }
+
+  private static class Tree {
+    Node head;
+    HashMap<Integer, Node> nodes = new HashMap<>();
+
+    Tree(int[][] t) {
+      head = new Node(1);
+      nodes.put(1,head);
+      for (int i = 0; i < t.length; i++) {
+        addNode(t[i][0], getNode(t[i][1]));
+      }
+    }
+
+    void addNode(int value, Node parent) {
+      Node n = new Node(value);
+      parent.child.put(n, 0);
+      nodes.put(value, n);
+    }
+
+    Node getNode(int value) {
+      return nodes.get(value);
+    }
+
+    void calculateSize() {
+      calcAux(head);
+    }
+
+    private int calcAux(Node n) {
+      if (n.child.isEmpty()) {
+        n.size = 1;
+        return 1;
+      }
+
+      n.size = 1;
+      for (Node c : n.child.keySet()) {
+        n.size += calcAux(c);
+      }
+
+      return n.size;
+    }
+
+    void print() {
+      recPrint(head);
+    }
+
+    void recPrint(Node n) {
+      if (n.child.isEmpty()) {
+        System.out.print("(" + n.value + "," + n.size + ")" + " ");
+        return;
+      }
+
+      System.out.print("(" + n.value + "," + n.size + ")" + " ");
+      for (Node c : n.child.keySet()) {
+        recPrint(c);
+      }
+    }
+  }
+
+  static int evenTree(int n, int m, int[][] tree) {
+    Tree t = new Tree(tree);
+    t.calculateSize();
+    t.print();
+    return 0;
+  }
+
+  public static void main(String[] args) {
+    Scanner in = new Scanner(System.in);
+    int n = in.nextInt();
+    int m = in.nextInt();
+    int[][] tree = new int[m][2];
+    for (int tree_i = 0; tree_i < m; tree_i++) {
+      for (int tree_j = 0; tree_j < 2; tree_j++) {
+        tree[tree_i][tree_j] = in.nextInt();
+      }
+    }
+    int result = evenTree(n, m, tree);
+    // System.out.println(result);
+    in.close();
+  }
+}
+
+//  // brute force solution
 //  private static boolean hasEvenConnectedNodes(HashMap<Integer, HashSet<Integer>> tree) {
 //    // list of graph nodes
 //    Iterator<Integer> it = tree.keySet().iterator();
@@ -116,19 +212,3 @@ public class EvenTreeSolution {
 //
 //    return result;
 //  }
-
-  public static void main(String[] args) {
-    Scanner in = new Scanner(System.in);
-    int n = in.nextInt();
-    int m = in.nextInt();
-    int[][] tree = new int[m][2];
-    for (int tree_i = 0; tree_i < m; tree_i++) {
-      for (int tree_j = 0; tree_j < 2; tree_j++) {
-        tree[tree_i][tree_j] = in.nextInt();
-      }
-    }
-    int result = 0;
-    System.out.println(result);
-    in.close();
-  }
-}
