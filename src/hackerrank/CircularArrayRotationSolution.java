@@ -5,13 +5,36 @@ import java.util.Scanner;
 public class CircularArrayRotationSolution {
   static int k;
 
+  // runtime: O(n), space: O(1)
   static int[] circularArrayRotation(int[] a, int[] m) {
-    int r = k % a.length;
-    int[] b = new int[a.length];
+    k = a.length - (k % a.length);
+    int first = 0;
+    int runner = 0;
+    int aux = a[first];
+
     for (int i = 0; i < a.length; i++) {
-      b[i] = a[(i + r) % a.length];
+      if (adjInd(runner + k, a.length) == first) {
+        a[runner] = aux;
+        first = adjInd(++first, a.length);
+        runner = first;
+        aux = a[first];
+      }
+      else {
+        a[runner] = a[adjInd(runner + k, a.length)];
+        runner = adjInd(runner + k, a.length);
+      }
     }
-    return b;
+
+    int[] result = new int[m.length];
+    for (int i = 0; i < m.length; i++) {
+      result[i] = a[m[i]];
+    }
+
+    return result;
+  }
+
+  static int adjInd(int index, int size) {
+    return (size + (index % size)) % size;
   }
 
   public static void main(String[] args) {
