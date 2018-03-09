@@ -3,21 +3,14 @@ package hackerrank;
 import java.util.*;
 
 public class EvenTreeSolution {
+
+  // structure to graph
   private static class Node {
-    HashMap<Node, Integer> child;
-    Node parent;
+    HashMap<Node, Integer> neighbors;
     int value;
-    int size;
 
     Node(int value) {
       this.value = value;
-      child = new HashMap<>();
-      parent = null;
-    }
-
-    Node(int value, Node parent) {
-      this(value);
-      this.parent = parent;
     }
   }
 
@@ -28,8 +21,8 @@ public class EvenTreeSolution {
     Tree(int[][] t) {
       head = new Node(1);
       nodes.put(1,head);
-      for (int i = 0; i < t.length; i++) {
-        addNode(t[i][0], getNode(t[i][1]));
+      for (int[] aT : t) {
+        addNode(aT[0], getNode(aT[1]));
       }
     }
 
@@ -67,11 +60,11 @@ public class EvenTreeSolution {
 
     void recPrint(Node n) {
       if (n.child.isEmpty()) {
-        System.out.print("(" + n.value + "," + n.size + ")" + " ");
+        System.out.print("(" + n.nodeValue + "," + n.size + ")" + " ");
         return;
       }
 
-      System.out.print("(" + n.value + "," + n.size + ")" + " ");
+      System.out.print("(" + n.nodeValue + "," + n.size + ")" + " ");
       for (Node c : n.child.keySet()) {
         recPrint(c);
       }
