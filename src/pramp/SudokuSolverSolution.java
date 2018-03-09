@@ -16,7 +16,7 @@ public class SudokuSolverSolution {
         if (board[i][j] == '.') {
           Pair<Integer, Integer> p = new Pair<>(i, j);
           dict.put(p, new ArrayList<>());
-          for (int k = 0; k < 9; k++) {
+          for (int k = 1; k <= 9; k++) {
             if (isValid((char) (k + '0'), i, j, board)) {
               dict.get(p).add((char) (k + '0'));
             }
@@ -50,14 +50,15 @@ public class SudokuSolverSolution {
     }
 
     for (Character c : map.get(p)) {
-      board[x][y] = c;
-      boolean result = recSudo(newX, newY, board, map);
-      if (result) {
-        return true;
+      if (isValid(c, x, y, board)) {
+        board[x][y] = c;
+        boolean result = recSudo(newX, newY, board, map);
+        if (result) {
+          return true;
+        }
+        board[x][y] = '.';
       }
-      board[x][y] = '.';
     }
-
     return false;
   }
 
@@ -113,6 +114,34 @@ public class SudokuSolverSolution {
         {'.', '2', '.', '8', '.', '.', '.', '6', '.'},
         {'.', '.', '6', '.', '7', '.', '.', '8', '.'}
     };
+
+    char[][] sudoku3 = {
+        {'.', '.', '.', '7', '.', '.', '3', '.', '1'},
+        {'3', '.', '.', '9', '.', '.', '.', '.', '.'},
+        {'.', '4', '.', '3', '1', '.', '2', '.', '.'},
+        {'.', '6', '.', '4', '.', '.', '5', '.', '.'},
+        {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
+        {'.', '.', '1', '.', '.', '8', '.', '4', '.'},
+        {'.', '.', '6', '.', '2', '1', '.', '5', '.'},
+        {'.', '.', '.', '.', '.', '9', '.', '.', '8'},
+        {'8', '.', '5', '.', '.', '4', '.', '.', '.'}
+    };
+
+    char[][] sudoku4 = {
+        {'.', '8', '9', '.', '4', '.', '6', '.', '5'},
+        {'.', '7', '.', '.', '.', '8', '.', '4', '1'},
+        {'5', '6', '.', '9', '.', '.', '.', '.', '8'},
+        {'.', '.', '.', '7', '.', '5', '.', '9', '.'},
+        {'.', '9', '.', '4', '.', '1', '.', '5', '.'},
+        {'.', '3', '.', '9', '.', '6', '.', '1', '.'},
+        {'8', '.', '.', '.', '.', '.', '.', '.', '7'},
+        {'.', '2', '.', '8', '.', '.', '.', '6', '.'},
+        {'.', '.', '6', '.', '7', '.', '.', '8', '.'}
+    };
+
+    System.out.println(sudokuSolve(sudoku));
     System.out.println(sudokuSolve(sudoku2));
+    System.out.println(sudokuSolve(sudoku3));
+    System.out.println(sudokuSolve(sudoku4));
   }
 }
