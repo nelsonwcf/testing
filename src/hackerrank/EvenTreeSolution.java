@@ -31,7 +31,7 @@ public class EvenTreeSolution {
 
 
   static int evenTree(int n, int m, int[][] tree) {
-
+    return 0;
   }
 
   public static void main(String[] args) {
